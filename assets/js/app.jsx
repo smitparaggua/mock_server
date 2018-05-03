@@ -11,7 +11,6 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
 
 // Import local files
 //
@@ -19,3 +18,14 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import React from "react"
+import ReactDom from "react-dom"
+import {BrowserRouter} from "react-router-dom"
+import routes from "./routes"
+
+import "phoenix_html"
+
+ReactDom.render(
+  <BrowserRouter children={routes} />,
+  document.getElementById("react-app")
+)
