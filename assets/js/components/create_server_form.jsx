@@ -1,17 +1,17 @@
 import React from "react"
+import {servers_path} from "../remote_routes"
+import {Input} from "./input"
+import {TextArea} from "./text_area"
+import {Submit} from "./submit"
 
 const CreateServerForm = () => {
   return (
-    <form role="form">
-      <div class="form-group has-feedback has-feedback-left">
-        <label class="control-label">Name</label>
-        <input type="text" name="name" placeholder="Name" className="form-control"/>
-        <i class="glyphicon glyphicon-user form-control-feedback"></i>
-      </div>
-
-      <input type="text" name="name" placeholder="Name" className="form-control"/>
-      <input type="text" name="path" placeholder="Path" className="form-control"/>
-      <input type="text" name="description" placeholder="Description" className="form-control"/>
+    <form action="{servers_path()}">
+      <Input type="text" name="name" icon="server" placeholder="Name"/>
+      <Input type="text" name="path" icon="code" placeholder="Path"/>
+      <TextArea name="description" placeholder="Description"
+                style={{marginBottom: "15px"}}/>
+      <Submit/>
     </form>
   )
 }

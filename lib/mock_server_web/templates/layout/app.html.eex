@@ -8,6 +8,7 @@
     <meta name="author" content="">
 
     <title>Hello MockServer!</title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/font-awesome.css") %>">
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 

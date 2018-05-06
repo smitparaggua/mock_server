@@ -44,10 +44,15 @@ exports.config = {
 
   // Configure your plugins
   plugins: {
+    copycat: {
+      fonts: ["node_modules/font-awesome/fonts"],
+      css: ["node_modules/font-awesome/css/font-awesome.css"]
+    },
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/],
-      presets: ["latest", "react"]
+      presets: ["latest", "react"],
+      plugins: ["transform-object-rest-spread"]
     }
   },
 
