@@ -7,6 +7,10 @@ defmodule MockServer.RepoTest do
     defstruct [:name, :age]
   end
 
+  defmodule Address do
+    defstruct [:street, :city]
+  end
+
   describe "insert" do
     test "allows inserting valid changesets" do
       changeset = Changeset.cast(%Person{}, %{name: "Joe"}, [:name])
@@ -19,8 +23,14 @@ defmodule MockServer.RepoTest do
   describe "get" do
     test "created records are retrievable by ID" do
       changeset = Changeset.cast(%Person{}, %{name: "Joe"}, [:name])
-      assert {:ok, created} = Repo.insert(changeset)
+      {:ok, created} = Repo.insert(changeset)
       assert Repo.get(Person, created.id) == created
+    end
+
+    test "separates records of different models" do
+      changeset = Changeset.cast(%Person{}, %{name: "Joe"}, [:name])
+      {:ok, created} = Repo.insert(changeset)
+      refute Repo.get(Address, created.id)
     end
   end
 end

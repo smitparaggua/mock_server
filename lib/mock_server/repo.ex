@@ -13,8 +13,8 @@ defmodule MockServer.Repo do
     GenServer.call(@name, {:insert, changeset})
   end
 
-  def get(_model, record_id) do
-    GenServer.call(@name, {:get, record_id})
+  def get(collection, record_id) do
+    GenServer.call(@name, {:get, collection, record_id})
   end
 
   # GenServer Callbacks
@@ -28,11 +28,17 @@ defmodule MockServer.Repo do
       Map.merge(changeset.data, changeset.changes)
       |> Map.put(:id, UUID.uuid4())
 
-    {:reply, {:ok, new_record}, Map.put(state, new_record.id, new_record)}
+    collection = changeset.data.__struct__
+    new_state =
+      state
+      |> Map.put_new(collection, %{})
+      |> put_in([collection, new_record.id], new_record)
+
+    {:reply, {:ok, new_record}, new_state}
   end
 
-  def handle_call({:get, record_id}, _from, state) do
-    record = Map.get(state, record_id)
+  def handle_call({:get, collection, record_id}, _from, state) do
+    record = get_in(state, [collection, record_id])
     {:reply, record, state}
   end
 end
