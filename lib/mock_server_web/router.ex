@@ -13,14 +13,14 @@ defmodule MockServerWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api", MockServerWeb do
+    pipe_through :api
+    resources "/servers", ServerController, only: [:create, :show]
+  end
+
   scope "/", MockServerWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/*path", PageController, :index
-  end
-
-  scope "/api", MockServerWeb do
-    pipe_through :api
-    resources "/servers", ServerController, only: [:create, :show]
   end
 end

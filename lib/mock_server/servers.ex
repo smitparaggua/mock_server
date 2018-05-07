@@ -17,6 +17,6 @@ defmodule MockServer.Servers do
   end
 
   def get(server_id) do
-    GenServer.call(@name, {:get, server_id})
+    Repo.get(Server, server_id)
   end
 end

@@ -8,31 +8,33 @@ defmodule MockServerWeb.ServerControllerTest do
     description: "Test Server"
   }
 
-  test "create server returns the server created", d(%{conn}) do
-    body =
-      conn
-      |> post(server_path(conn, :create), @valid_server_attributes)
-      |> json_response(201)
+  describe "create" do
+    test "create server returns the server created", d(%{conn}) do
+      body =
+        conn
+        |> post(server_path(conn, :create), @valid_server_attributes)
+        |> json_response(201)
 
-    assert %{
-      "id" => _,
-      "name" => "Server 1",
-      "path" => "/server1",
-      "description" => "Test Server"
-    } = body
+      assert %{
+        "id" => _,
+        "name" => "Server 1",
+        "path" => "/server1",
+        "description" => "Test Server"
+      } = body
+    end
   end
 
-  describe "created servers" do
+  describe "get" do
     setup d(%{conn}) do
       created =
         conn
         |> post(server_path(conn, :create), @valid_server_attributes)
         |> json_response(201)
 
-      {:ok, d(%{created: created})}
+      {:ok, d(%{created})}
     end
 
-    test "are retrievable", d(%{conn, created}) do
+    test "existing servers are retrievable", d(%{conn, created}) do
       body =
         conn
         |> get(server_path(conn, :show, created["id"]))

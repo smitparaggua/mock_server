@@ -20,7 +20,7 @@ defmodule MockServer.RepoTest do
     test "created records are retrievable by ID" do
       changeset = Changeset.cast(%Person{}, %{name: "Joe"}, [:name])
       assert {:ok, created} = Repo.insert(changeset)
-      assert Repo.get(created.id) == created
+      assert Repo.get(Person, created.id) == created
     end
   end
 end

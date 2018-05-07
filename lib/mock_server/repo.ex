@@ -13,7 +13,7 @@ defmodule MockServer.Repo do
     GenServer.call(@name, {:insert, changeset})
   end
 
-  def get(record_id) do
+  def get(_model, record_id) do
     GenServer.call(@name, {:get, record_id})
   end
 
