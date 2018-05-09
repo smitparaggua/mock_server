@@ -11,7 +11,7 @@ defmodule MockServer.Application do
       # Start the endpoint when the application starts
       supervisor(MockServerWeb.Endpoint, []),
       # Start your own worker by calling: MockServer.Worker.start_link(arg1, arg2, arg3)
-      worker(MockServer.Repo, [])
+      worker(MockServer.Repo, [], function: :start_link_default)
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
