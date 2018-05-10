@@ -1,7 +1,7 @@
 defmodule MockServerWeb.ServerControllerTest do
   use MockServerWeb.ConnCase
   import Destructure
-  alias MockServer.ListUtils
+  alias MockServer.{Assertions, Servers}
 
   @valid_server_attributes %{
     name: "Server 1",
@@ -43,6 +43,7 @@ defmodule MockServerWeb.ServerControllerTest do
 
   describe "index" do
     test "returns list of servers", d(%{conn}) do
+      Servers.clear()
       servers =
         Stream.repeatedly(fn -> create_server(conn) end)
         |> Stream.take(3)
@@ -53,8 +54,7 @@ defmodule MockServerWeb.ServerControllerTest do
         |> get(server_path(conn, :index))
         |> json_response(200)
 
-      assert matches_members?(body["data"], servers),
-        "left: #{inspect body["data"]}\nright: #{inspect servers}"
+      Assertions.matches_members?(body["data"], servers)
     end
   end
 
@@ -62,9 +62,5 @@ defmodule MockServerWeb.ServerControllerTest do
     conn
     |> post(server_path(conn, :create), @valid_server_attributes)
     |> json_response(201)
-  end
-
-  defp matches_members?(left, right) do
-    ListUtils.element_occurrence(left) == ListUtils.element_occurrence(right)
   end
 end

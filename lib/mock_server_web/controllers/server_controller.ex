@@ -16,7 +16,7 @@ defmodule MockServerWeb.ServerController do
   end
 
   def index(conn, _params) do
-    server = Servers.list()
-    render(conn, "servers.json", %{servers: []})
+    servers = Servers.list()
+    render(conn, "servers.json", %{servers: servers})
   end
 end

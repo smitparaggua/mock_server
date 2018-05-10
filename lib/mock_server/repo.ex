@@ -25,6 +25,14 @@ defmodule MockServer.Repo do
     GenServer.call(repo, {:get, collection, record_id})
   end
 
+  def list(repo \\ @name, collection) do
+    GenServer.call(repo, {:list, collection})
+  end
+
+  def clear(repo \\ @name) do
+    GenServer.call(repo, :clear)
+  end
+
   # GenServer Callbacks
 
   def init(_args) do
@@ -61,5 +69,14 @@ defmodule MockServer.Repo do
   def handle_call({:get, collection, record_id}, _from, state) do
     record = get_in(state, [collection, record_id])
     {:reply, record, state}
+  end
+
+  def handle_call({:list, collection}, _from, state) do
+    records = state |> Map.get(collection, %{}) |> Map.values()
+    {:reply, records, state}
+  end
+
+  def handle_call(:clear, _from, _state) do
+    {:reply, :ok, %{}}
   end
 end

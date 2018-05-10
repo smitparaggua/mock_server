@@ -1,8 +1,7 @@
 defmodule MockServer.RepoTest do
   use ExUnit.Case, async: true
   import Destructure
-  alias MockServer.Repo
-  alias MockServer.Changeset
+  alias MockServer.{Repo, Changeset, Assertions}
 
   defmodule Person do
     defstruct [:name, :age]
@@ -58,12 +57,26 @@ defmodule MockServer.RepoTest do
       {:ok, created3} = Repo.insert(repo, %Person{name: "Ken"})
       list = Repo.list(repo, Person)
       expected = [created1, created2, created3]
-      assert matches_members?(list, expected),
-        "left: #{inspect list}\nright: #{inspect expected}"
+      Assertions.matches_members?(list, expected)
+    end
+
+    test "returns empty list when collection does not exist", d(%{repo}) do
+      assert Repo.list(repo, Person) == []
     end
   end
 
-  defp matches_members?(left, right) do
-    ListUtils.element_occurrence(left) == ListUtils.element_occurrence(right)
+  describe ".clear/0" do
+    setup do
+      {:ok, repo} = Repo.start_link()
+      {:ok, d(%{repo})}
+    end
+
+    test "deletes all records", d(%{repo}) do
+      Repo.insert(repo, %Person{name: "Joe"})
+      Repo.insert(repo, %Address{street: "San Rafael St."})
+      Repo.clear(repo)
+      assert Repo.list(repo, Person) == []
+      assert Repo.list(repo, Address) == []
+    end
   end
 end
