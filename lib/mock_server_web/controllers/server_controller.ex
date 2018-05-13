@@ -11,8 +11,10 @@ defmodule MockServerWeb.ServerController do
   end
 
   def show(conn, %{"id" => id}) do
-    server = Servers.get(id)
-    render(conn, "server.json", d(%{server}))
+    case Servers.get(id) do
+      nil -> send_resp(conn, 404, "")
+      server -> render(conn, "server.json", d(%{server}))
+    end
   end
 
   def index(conn, _params) do

@@ -1,4 +1,5 @@
 import React from "react"
+import {Link} from "react-router-dom"
 import axios from "axios"
 
 class Servers extends React.PureComponent {
@@ -51,7 +52,7 @@ const Server = ({server}) => {
   }
   return (
     <li style={style}>
-      <div>{server.name}</div>
+      <Link to={`/servers/${server.id}`}>{server.name}</Link>
       <div style={{fontSize: "smaller", color: "gray"}}>
         <code>{server.path}</code>
         <div>{server.description}</div>

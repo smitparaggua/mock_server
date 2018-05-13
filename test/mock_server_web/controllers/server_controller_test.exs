@@ -39,6 +39,11 @@ defmodule MockServerWeb.ServerControllerTest do
 
       assert body == created
     end
+
+    test "returns not found when server does not exist", d(%{conn}) do
+      response = get(conn, server_path(conn, :show, "not-found"))
+      assert response.status == 404
+    end
   end
 
   describe "index" do
