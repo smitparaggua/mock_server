@@ -33,22 +33,30 @@ class Servers extends React.PureComponent {
 }
 
 const ServerListing = ({servers}) => {
+  const style = {
+    listStyleType: "none"
+  }
   return (
-    <ul>
+    <ul style={style}>
       {servers.map(server => {
-        return (
-          <li key={server.id}>
-            <Server server={server}/>
-          </li>
-        )
+        return <Server key={server.id} server={server}/>
       })}
     </ul>
   )
 }
 
 const Server = ({server}) => {
+  const style = {
+    marginBottom: "1em"
+  }
   return (
-    <span>{server.name}</span>
+    <li style={style}>
+      <div>{server.name}</div>
+      <div style={{fontSize: "smaller", color: "gray"}}>
+        <code>{server.path}</code>
+        <div>{server.description}</div>
+      </div>
+    </li>
   )
 }
 

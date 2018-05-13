@@ -17,16 +17,19 @@ defmodule MockServer.Repo do
 
   # Client
 
-  def insert(repo \\ @name, changeset) do
+  def insert(changeset, options \\ []) do
+    repo = Keyword.get(options, :repo, @name)
     GenServer.call(repo, {:insert, changeset})
   end
 
-  def get(repo \\ @name, collection, record_id) do
+  def get(collection, record_id, options \\ []) do
+    repo = Keyword.get(options, :repo, @name)
     GenServer.call(repo, {:get, collection, record_id})
   end
 
-  def list(repo \\ @name, collection) do
-    GenServer.call(repo, {:list, collection})
+  def list(collection, options \\ []) do
+    repo = Keyword.get(options, :repo, @name)
+    GenServer.call(repo, {:list, collection, options})
   end
 
   def clear(repo \\ @name) do
@@ -71,12 +74,33 @@ defmodule MockServer.Repo do
     {:reply, record, state}
   end
 
-  def handle_call({:list, collection}, _from, state) do
-    records = state |> Map.get(collection, %{}) |> Map.values()
-    {:reply, records, state}
+  def handle_call({:list, collection, options}, from, state) do
+    Task.start_link(fn ->
+      records =
+        state
+        |> Map.get(collection, %{})
+        |> Map.values()
+        |> sort_records(Keyword.get(options, :order))
+
+      GenServer.reply(from, records)
+    end)
+
+    {:noreply, state}
   end
 
   def handle_call(:clear, _from, _state) do
     {:reply, :ok, %{}}
+  end
+
+  defp sort_records(records, order_options) do
+    case order_options do
+      nil -> records
+
+      {attribute, order} ->
+        compare = if (order == :desc), do: &Kernel.>=/2, else: &Kernel.<=/2
+        Enum.sort(records, fn left, right ->
+          compare.(Map.get(left, attribute), Map.get(right, attribute))
+        end)
+    end
   end
 end

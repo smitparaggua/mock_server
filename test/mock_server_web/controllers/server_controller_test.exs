@@ -1,7 +1,7 @@
 defmodule MockServerWeb.ServerControllerTest do
   use MockServerWeb.ConnCase
   import Destructure
-  alias MockServer.{Assertions, Servers}
+  alias MockServer.Servers
 
   @valid_server_attributes %{
     name: "Server 1",
@@ -42,25 +42,26 @@ defmodule MockServerWeb.ServerControllerTest do
   end
 
   describe "index" do
-    test "returns list of servers", d(%{conn}) do
+    test "returns list of servers in ascending order by name", d(%{conn}) do
       Servers.clear()
-      servers =
-        Stream.repeatedly(fn -> create_server(conn) end)
-        |> Stream.take(3)
-        |> Enum.to_list()
+      servers = [
+        create_server(conn, %{name: "A Server", path: "/server/a"}),
+        create_server(conn, %{name: "B Server", path: "/server/b"}),
+        create_server(conn, %{name: "C Server", path: "/server/c"})
+      ]
 
       body =
         conn
         |> get(server_path(conn, :index))
         |> json_response(200)
 
-      Assertions.matches_members?(body["data"], servers)
+      assert body["data"] == servers
     end
   end
 
-  defp create_server(conn) do
+  defp create_server(conn, server_attributes \\ @valid_server_attributes) do
     conn
-    |> post(server_path(conn, :create), @valid_server_attributes)
+    |> post(server_path(conn, :create), server_attributes)
     |> json_response(201)
   end
 end
