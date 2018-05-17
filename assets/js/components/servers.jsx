@@ -1,6 +1,13 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import axios from "axios"
+import {ButtonLink} from "./button"
+
+const headerStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center"
+}
 
 class Servers extends React.PureComponent {
   constructor(props) {
@@ -23,7 +30,11 @@ class Servers extends React.PureComponent {
   render() {
     return (
       <div className="container">
-        <h2>Servers</h2>
+        <div style={headerStyle}>
+          <h2 style={{display: "inline-block"}}>Servers</h2>
+          <ButtonLink to="/servers/new" icon="plus">CreateServer</ButtonLink>
+        </div>
+
         {this.state.loading
           ? "Loading"
           : <ServerListing servers={this.state.servers}/>

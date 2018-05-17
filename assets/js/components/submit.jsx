@@ -5,7 +5,8 @@ const style = {
   borderRadius: inputStyle.borderRadius,
   padding: inputStyle.padding,
   lineHeight: inputStyle.lineHeight,
-  fontSize: inputStyle.fontSize
+  fontSize: inputStyle.fontSize,
+  cursor: "pointer"
 }
 
 export const Submit = () => {
