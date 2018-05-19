@@ -1,7 +1,7 @@
 defmodule MockServerWeb.ServerControllerTest do
   use MockServerWeb.ConnCase
+  use MockServer.DataCase
   import Destructure
-  alias MockServer.Servers
 
   @valid_server_attributes %{
     name: "Server 1",
@@ -48,7 +48,6 @@ defmodule MockServerWeb.ServerControllerTest do
 
   describe "index" do
     test "returns list of servers in ascending order by name", d(%{conn}) do
-      Servers.clear()
       servers = [
         create_server(conn, %{name: "A Server", path: "/server/a"}),
         create_server(conn, %{name: "B Server", path: "/server/b"}),

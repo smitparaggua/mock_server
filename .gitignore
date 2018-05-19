@@ -28,3 +28,6 @@ npm-debug.log
 
 # Emacs stuff
 .#*
+
+# OSX files
+.DS_Store
