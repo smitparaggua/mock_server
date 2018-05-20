@@ -6,5 +6,9 @@ config :mock_server, MockServerWeb.Endpoint,
   http: [port: 4001],
   server: false
 
+config :mock_server, MockServer.Repo,
+  adapter: Sqlite.Ecto2,
+  database: "mock_server_test.sqlite3"
+
 # Print only warnings and errors during test
 config :logger, level: :warn

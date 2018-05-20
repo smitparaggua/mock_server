@@ -39,7 +39,9 @@ defmodule MockServer.Mixfile do
       {:gettext, "~> 0.11"},
       {:destructure, "~> 0.2.3"},
       {:cowboy, "~> 1.0"},
-      {:uuid, "~> 1.1.8"}
+      {:uuid, "~> 1.1.8"},
+      {:ecto, "~> 2.1"},
+      {:sqlite_ecto2, "~> 2.2"}
     ]
   end
 end

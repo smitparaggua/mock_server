@@ -14,6 +14,10 @@ config :mock_server, MockServerWeb.Endpoint,
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../assets", __DIR__)]]
 
+config :mock_server, MockServer.Repo,
+  adapter: Sqlite.Ecto2,
+  database: "mock_server.sqlite3"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
