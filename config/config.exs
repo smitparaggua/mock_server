@@ -13,6 +13,8 @@ config :mock_server, MockServerWeb.Endpoint,
   pubsub: [name: MockServer.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :mock_server, ecto_repos: [MockServer.Repo]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
