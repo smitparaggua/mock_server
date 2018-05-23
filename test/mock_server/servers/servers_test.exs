@@ -1,5 +1,6 @@
 defmodule MockServer.ServersTest do
-  use ExUnit.Case, async: true
+  #use ExUnit.Case, async: true
+  use MockServer.DataCase
   alias MockServer.Servers
 
   @valid_server_attributes %{

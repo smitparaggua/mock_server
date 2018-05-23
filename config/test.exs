@@ -8,7 +8,9 @@ config :mock_server, MockServerWeb.Endpoint,
 
 config :mock_server, MockServer.Repo,
   adapter: Sqlite.Ecto2,
-  database: "mock_server_test.sqlite3"
+  database: "mock_server_test.sqlite3",
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: 10
 
 # Print only warnings and errors during test
 config :logger, level: :warn

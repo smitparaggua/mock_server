@@ -1,9 +1,15 @@
 defmodule MockServer.Servers.Server do
-  import MockServer.Changeset
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  defstruct [:id, :name, :path, :description]
+  schema "servers" do
+    field :name, :string
+    field :path, :string
+    field :description, :string
+    timestamps()
+  end
 
   def changeset(%__MODULE__{} = server, params) do
-    cast(server, params, [:name, :path, :description])
+    cast(server, params, ~w(name path description)a)
   end
 end
