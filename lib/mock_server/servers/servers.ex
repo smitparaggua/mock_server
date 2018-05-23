@@ -9,5 +9,5 @@ defmodule MockServer.Servers do
 
   def get(server_id), do: Repo.get(Server, server_id)
 
-  def list(), do: Repo.list(Server, order: {:name, :asc})
+  def list(), do: Repo.all(Server)
 end

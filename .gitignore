@@ -31,3 +31,6 @@ npm-debug.log
 
 # OSX files
 .DS_Store
+
+# Database
+mock_server*.sqlite3*

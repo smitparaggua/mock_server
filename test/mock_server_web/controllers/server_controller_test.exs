@@ -1,6 +1,5 @@
 defmodule MockServerWeb.ServerControllerTest do
-  use MockServerWeb.ConnCase
-  use MockServer.DataCase
+  use MockServerWeb.ConnCase, async: true
   import Destructure
 
   @valid_server_attributes %{
@@ -41,7 +40,8 @@ defmodule MockServerWeb.ServerControllerTest do
     end
 
     test "returns not found when server does not exist", d(%{conn}) do
-      response = get(conn, server_path(conn, :show, "not-found"))
+      non_existing_id = "51f41bf1-0b6e-4375-b5e7-4f6546f63212"
+      response = get(conn, server_path(conn, :show, non_existing_id))
       assert response.status == 404
     end
   end

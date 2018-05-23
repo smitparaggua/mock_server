@@ -2,7 +2,8 @@ defmodule MockServer.Repo.Migrations.CreateServer do
   use Ecto.Migration
 
   def change do
-    create table(:servers) do
+    create table(:servers, primary_key: false) do
+      add :id, :binary_id, primary_key: true
       add :name, :string
       add :path, :string
       add :description, :text

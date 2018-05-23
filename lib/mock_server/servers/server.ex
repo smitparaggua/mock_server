@@ -2,6 +2,8 @@ defmodule MockServer.Servers.Server do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+
   schema "servers" do
     field :name, :string
     field :path, :string
