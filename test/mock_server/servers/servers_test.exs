@@ -26,4 +26,12 @@ defmodule MockServer.ServersTest do
       assert Servers.get(server.id) == server
     end
   end
+
+  describe "list" do
+    test "returns all servers starting from most recently created" do
+      {:ok, first} = Servers.create(%{name: "First Server", path: "/first"})
+      {:ok, second} = Servers.create(%{name: "Second Server", path: "/second"})
+      assert Servers.list() == [second, first]
+    end
+  end
 end

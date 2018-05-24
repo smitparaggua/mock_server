@@ -1,6 +1,7 @@
 defmodule MockServerWeb.ServerControllerTest do
   use MockServerWeb.ConnCase, async: true
   import Destructure
+  alias MockServer.Assertions
 
   @valid_server_attributes %{
     name: "Server 1",
@@ -47,7 +48,7 @@ defmodule MockServerWeb.ServerControllerTest do
   end
 
   describe "index" do
-    test "returns list of servers in ascending order by name", d(%{conn}) do
+    test "returns list of servers", d(%{conn}) do
       servers = [
         create_server(conn, %{name: "A Server", path: "/server/a"}),
         create_server(conn, %{name: "B Server", path: "/server/b"}),
@@ -59,7 +60,7 @@ defmodule MockServerWeb.ServerControllerTest do
         |> get(server_path(conn, :index))
         |> json_response(200)
 
-      assert body["data"] == servers
+      assert Assertions.matches_members?(body["data"], servers)
     end
   end
 
