@@ -15,7 +15,9 @@ defmodule MockServerWeb.Router do
 
   scope "/api", MockServerWeb do
     pipe_through :api
-    resources "/servers", ServerController, only: [:create, :show, :index]
+    resources "/servers", ServerController, only: [:create, :show, :index] do
+      resources "/routes", RouteController, only: [:create]
+    end
   end
 
   scope "/", MockServerWeb do

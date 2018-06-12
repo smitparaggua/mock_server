@@ -8,6 +8,11 @@ defmodule MockServer.ServersTest do
     description: "Test Server"
   }
 
+  @route_attrs %{
+    method: "GET",
+    path: "/some-route"
+  }
+
   describe "create" do
     test "successful creation of server returns ok" do
       assert {:ok, server} = Servers.create(@valid_server_attributes)
@@ -32,6 +37,15 @@ defmodule MockServer.ServersTest do
       {:ok, first} = Servers.create(%{name: "First Server", path: "/first"})
       {:ok, second} = Servers.create(%{name: "Second Server", path: "/second"})
       assert Servers.list() == [second, first]
+    end
+  end
+
+  describe "add_route" do
+    test "returns new route" do
+      {:ok, server} = Servers.create(@valid_server_attributes)
+      {:ok, route} = Servers.add_route(server.id, @route_attrs)
+      assert server.id
+      assert @route_attrs = route
     end
   end
 end

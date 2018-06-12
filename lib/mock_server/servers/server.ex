@@ -9,6 +9,8 @@ defmodule MockServer.Servers.Server do
     field :path, :string
     field :description, :string
     timestamps()
+
+    has_many :routes, MockServer.Servers.Route
   end
 
   def changeset(%__MODULE__{} = server, params) do

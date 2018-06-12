@@ -26,8 +26,4 @@ defmodule MockServer.Application do
     MockServerWeb.Endpoint.config_change(changed, removed)
     :ok
   end
-
-  def prep_stop(state) do
-    IO.puts("Application dying")
-  end
 end
