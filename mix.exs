@@ -41,7 +41,7 @@ defmodule MockServer.Mixfile do
       {:cowboy, "~> 1.0"},
       {:uuid, "~> 1.1.8"},
       {:ecto, "~> 2.2"},
-      {:sqlite_ecto2, "~> 2.2"}
+      {:postgrex, "~> 0.13"}
     ]
   end
 end

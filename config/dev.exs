@@ -15,8 +15,8 @@ config :mock_server, MockServerWeb.Endpoint,
                     cd: Path.expand("../assets", __DIR__)]]
 
 config :mock_server, MockServer.Repo,
-  adapter: Sqlite.Ecto2,
-  database: "mock_server.sqlite3"
+  pool_size: 10,
+  database: "mock_server"
 
 # ## SSL Support
 #
