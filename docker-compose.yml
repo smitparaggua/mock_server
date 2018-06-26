@@ -5,23 +5,10 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-
-  migration:
-    build: .
-    command: mix ecto.create && mix ecto.migrate
-    volumes:
-      - ./assets:/src/assets
-      - ./config:/src/config
-      - ./lib:/src/lib
-      - ./priv:/src/priv
-      - ./test:/src/test
-      - ./.iex.exs:/src/.iex.exs
-    depends_on:
-      - db
       
   web:
     build: .
-    command: mix phx.server
+    command: sh -c "mix ecto.create ; mix ecto.migrate ; mix phx.server"
     volumes:
       - ./assets:/src/assets
       - ./config:/src/config
@@ -33,4 +20,3 @@ services:
       - "4000:4000"
     depends_on:
       - db
-      - migration

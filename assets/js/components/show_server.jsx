@@ -1,6 +1,13 @@
 import React from "react"
 import {Servers} from "../api"
 import NotFound from "./errors/not_found"
+import {ButtonLink} from "./button"
+
+const headerStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center"
+}
 
 class ShowServer extends React.PureComponent {
   constructor(props) {
@@ -36,7 +43,15 @@ class ShowServer extends React.PureComponent {
   renderServer() {
     const server = this.state.server
     if (server) {
-      return <h1>{server.name}</h1>
+      return (
+        <div className="container">
+          <div style={headerStyle}>
+            <h2 style={{display: "inline-block"}}>{server.name}</h2>
+            <ButtonLink to={`/servers/${server.id}/routes/new`} icon="plus">Create Route</ButtonLink>
+          </div>
+
+        </div>
+      )
     }
     return <NotFound />
   }

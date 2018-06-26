@@ -32,7 +32,7 @@ class Servers extends React.PureComponent {
       <div className="container">
         <div style={headerStyle}>
           <h2 style={{display: "inline-block"}}>Servers</h2>
-          <ButtonLink to="/servers/new" icon="plus">CreateServer</ButtonLink>
+          <ButtonLink to="/servers/new" icon="plus">Create Server</ButtonLink>
         </div>
 
         {this.state.loading

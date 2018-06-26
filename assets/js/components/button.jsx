@@ -18,7 +18,7 @@ const ButtonLink = ({children, to, icon}) => {
   return (
     <Button>
       <Link to={to} style={{textDecoration: "none"}}>
-        <i className={`fa fa-${icon}`} style={{color: "gray"}}></i> Create Server
+        <i className={`fa fa-${icon}`} style={{color: "gray"}}></i> {children}
       </Link>
     </Button>
   )

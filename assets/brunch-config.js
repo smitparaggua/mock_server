@@ -1,3 +1,5 @@
+const path = require('path')
+
 exports.config = {
   // See http://brunch.io/#documentation for docs.
   files: {
@@ -52,7 +54,15 @@ exports.config = {
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/],
       presets: ["latest", "react"],
-      plugins: ["transform-object-rest-spread"]
+      plugins: [
+        "transform-object-rest-spread",
+        ["module-resolver", {
+          root: ["./js/components"],
+          alias: {
+            "remote_routes": "./js/remote_routes"
+          }
+        }]
+      ]
     }
   },
 
@@ -61,6 +71,12 @@ exports.config = {
       "js/app.js": ["js/app"]
     }
   },
+
+  // for docker notifications not working
+  watcher: {
+    usePolling: true
+  },
+  notifications: false,
 
   npm: {
     enabled: true
