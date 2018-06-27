@@ -1,15 +1,32 @@
 import React from "react"
 import {Redirect} from "react-router-dom"
 import {Input} from "input"
-import {TextArea} from "./text_area"
-import {Submit} from "./submit"
+import {TextArea} from "text_area"
+import {Submit} from "submit"
 
 export default class CreateRouteForm extends React.PureComponent {
+  constructor(props) {
+    super(props)
+    this.state = {
+      method: "GET",
+      path: "",
+      description: "",
+      responseType: "application/json"
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange(event) {
+    event.preventDefault()
+    console.log(event.target.value)
+  }
+
   render() {
     return (
       <form onSubmit={this.onSubmit}>
         <label>Method</label>
-        <select name="method">
+        <select name="method" onChange={this.handleChange}>
           <option value="GET">GET</option>
           <option value="POST">POST</option>
           <option value="PUT">PUT</option>
@@ -17,10 +34,9 @@ export default class CreateRouteForm extends React.PureComponent {
           <option value="DELETE">DELETE</option>
         </select>
 
-        <Input type="text" name="path" icon="code" placeholder="/"/>
-        <TextArea name="description"/>
-
-        <Input type="text" name="status_code"/>
+        <Input type="text" name="path" icon="code" placeholder="URL"/>
+        <TextArea name="description" placeholder="Description"/>
+        <Input type="text" name="statusCode" placeholder="Status Code"/>
 
         <label>Response Type</label>
         <select name="response_type">
@@ -32,7 +48,9 @@ export default class CreateRouteForm extends React.PureComponent {
           <option value="text/html">HTML</option>
         </select>
 
-        <Submit/>
+        <div>
+          <Submit/>
+        </div>
       </form>
     )
   }
