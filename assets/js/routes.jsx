@@ -1,9 +1,9 @@
 import React from "react"
 import {Route, Switch} from "react-router-dom"
-import Home from "home"
-import CreateServer from "create_server"
-import Servers from "servers"
-import ShowServer from "show_server"
+import Home from "components/home"
+import CreateServer from "components/create_server"
+import Servers from "components/servers"
+import ShowServer from "components/show_server"
 import CreateRoute from "routes/create"
 import NotFound from "errors/not_found"
 

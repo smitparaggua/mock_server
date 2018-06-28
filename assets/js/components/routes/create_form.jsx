@@ -1,8 +1,9 @@
 import React from "react"
 import {Redirect} from "react-router-dom"
-import {Input} from "input"
-import {TextArea} from "text_area"
-import {Submit} from "submit"
+import {Input} from "components/input"
+import {TextArea} from "components/text_area"
+import {Submit} from "components/submit"
+import {Routes} from "api"
 
 export default class CreateRouteForm extends React.PureComponent {
   constructor(props) {
@@ -18,8 +19,12 @@ export default class CreateRouteForm extends React.PureComponent {
   }
 
   handleChange(event) {
-    event.preventDefault()
-    console.log(event.target.value)
+    this.setState({[event.target.name]: event.target.value})
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    return Routes.create()
   }
 
   render() {
@@ -36,10 +41,11 @@ export default class CreateRouteForm extends React.PureComponent {
 
         <Input type="text" name="path" icon="code" placeholder="URL"/>
         <TextArea name="description" placeholder="Description"/>
+
         <Input type="text" name="statusCode" placeholder="Status Code"/>
 
         <label>Response Type</label>
-        <select name="response_type">
+        <select name="responseType">
           <option value="application/json">JSON (application/json)</option>
           <option value="text/plain">Text (text/plain)</option>
           <option value="application/javascript">Javascript (application/javascript)</option>
@@ -47,6 +53,8 @@ export default class CreateRouteForm extends React.PureComponent {
           <option value="text/xml">XML (text/xml)</option>
           <option value="text/html">HTML</option>
         </select>
+
+        <TextArea name="responseBody" placeholder="Response Body"/>
 
         <div>
           <Submit/>

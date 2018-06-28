@@ -10,4 +10,7 @@ defmodule MockServerWeb.RouteController do
     |> put_status(:created)
     |> render("route.json", d%{route})
   end
+
+  def index(conn, params) do
+  end
 end

@@ -1,5 +1,5 @@
 import React from "react"
-import {Servers} from "../api"
+import {Servers, Routes} from "api"
 import NotFound from "./errors/not_found"
 import {ButtonLink} from "./button"
 
@@ -15,6 +15,7 @@ class ShowServer extends React.PureComponent {
     this.state = {
       server: null,
       loading: true,
+      loadingRoutes: true,
       serverId: props.match.params.id
     }
     this.renderLoading = this.renderLoading.bind(this)
@@ -26,8 +27,17 @@ class ShowServer extends React.PureComponent {
       .then((response) => this.setState({loading: false, server: response.data}))
       .catch((error) => {
         const response = error.response || {}
-        response.status == 404
+        return response.status == 404
           ? this.setState({loading: false})
+          : Promise.reject(error)
+      })
+
+    Routes.list(this.state.serverId)
+      .then(response => this.setState({loadingRoutes: false, routes: response.data}))
+      .catch(error => {
+        const response = error.response || {}
+        return response.status == 404
+          ? this.setState({loadingRoutes: false})
           : Promise.reject(error)
       })
   }
@@ -42,6 +52,9 @@ class ShowServer extends React.PureComponent {
 
   renderServer() {
     const server = this.state.server
+    console.log('ssssssss-routes-------')
+    console.log(this.state.routes)
+    console.log('ssssssss-routes-end---')
     if (server) {
       return (
         <div className="container">
@@ -50,6 +63,21 @@ class ShowServer extends React.PureComponent {
             <ButtonLink to={`/servers/${server.id}/routes/new`} icon="plus">Create Route</ButtonLink>
           </div>
 
+          {this.state.routes
+            ? (
+              <ul style={{listStyleType: "none"}}>
+                {this.state.routes.map(route => (
+                  <li style={{}}>
+                    <span>{route.method} {route.path}</span>
+                    <div style={{fontSize: "smaller", color: "gray"}}>
+                      <div>{route.description}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )
+            : <div>Shit</div>
+          }
         </div>
       )
     }

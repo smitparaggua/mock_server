@@ -3,6 +3,7 @@ defmodule MockServer.Servers.Route do
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
 
   schema "routes" do
     field :method, :string

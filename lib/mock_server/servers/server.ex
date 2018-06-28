@@ -14,6 +14,9 @@ defmodule MockServer.Servers.Server do
   end
 
   def changeset(%__MODULE__{} = server, params) do
-    cast(server, params, ~w(name path description)a)
+    server
+    |> cast(params, ~w(name path description)a)
+    |> unique_constraint(:path)
+    |> unique_constraint(:name)
   end
 end

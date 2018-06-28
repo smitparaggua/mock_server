@@ -28,5 +28,7 @@ import_config "#{Mix.env}.exs"
 config :mock_server, MockServer.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "db",
-  port: "5432"
+  hostname: "localhost",
+  port: 5444
+  #hostname: "db",
+  #port: "5432"

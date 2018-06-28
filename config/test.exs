@@ -8,7 +8,7 @@ config :mock_server, MockServerWeb.Endpoint,
 
 config :mock_server, MockServer.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
-  pool_size: 10
+  pool_size: 10,
   database: "mock_server_test"
 
 # Print only warnings and errors during test

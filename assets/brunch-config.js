@@ -57,9 +57,11 @@ exports.config = {
       plugins: [
         "transform-object-rest-spread",
         ["module-resolver", {
-          root: ["./js/components"],
+          root: ["./js"],
           alias: {
-            "remote_routes": "./js/remote_routes"
+            "remote_routes": "./js/remote_routes",
+            "errors": "./js/components/errors",
+            "routes": "./js/components/routes"
           }
         }]
       ]
