@@ -10,4 +10,8 @@ defmodule MockServerWeb.RouteView do
   def render("route.json", d%{route}) do
     Map.take(route, @route_attributes)
   end
+
+  def render("routes.json", d%{routes}) do
+    Enum.map(routes, &render("route.json", %{route: &1}))
+  end
 end

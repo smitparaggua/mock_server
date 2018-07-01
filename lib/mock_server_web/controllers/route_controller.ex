@@ -12,5 +12,7 @@ defmodule MockServerWeb.RouteController do
   end
 
   def index(conn, params) do
+    routes = Servers.list_routes(params["server_id"])
+    render(conn, "routes.json", d%{routes})
   end
 end

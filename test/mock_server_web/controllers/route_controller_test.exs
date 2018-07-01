@@ -39,7 +39,7 @@ defmodule MockServerWeb.RouteControllerTest do
     server = ServersFactory.create()
     routes =
       [route_params(%{path: "/route-1"}), route_params(%{path: "/route-2"})]
-    |> Enum.map(&KeyConvert.camelize/1)
+      |> Enum.map(&KeyConvert.stringify/1)
 
     path = server_route_path(conn, :create, server.id)
     create_route = fn route -> post(conn, path, route) end
@@ -49,10 +49,9 @@ defmodule MockServerWeb.RouteControllerTest do
       conn
       |> get(server_route_path(conn, :index, server.id))
       |> json_response(200)
-      |> KeyConvert.snake_case()
 
-    assert Enum.includes(body, Enum.at(routes, 0))
-    assert Enum.includes(body, Enum.at(routes, 1))
+    assert includes_similar_member?(body, Enum.at(routes, 0))
+    assert includes_similar_member?(body, Enum.at(routes, 1))
   end
 
   def route_params(custom \\ %{}) do
@@ -66,5 +65,18 @@ defmodule MockServerWeb.RouteControllerTest do
     }
 
     Map.merge(default, custom)
+  end
+
+  def includes_similar_member?(collection, member) do
+    member = MapSet.new(member)
+    subset? = fn element ->
+      element = MapSet.new(element)
+      MapSet.subset?(member, element)
+    end
+
+    collection
+    |> Enum.find(subset?)
+    |> is_nil()
+    |> Kernel.not()
   end
 end
