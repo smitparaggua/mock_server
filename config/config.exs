@@ -20,11 +20,7 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
-
-
+# TODO remove this
 config :mock_server, MockServer.Repo,
   username: "postgres",
   password: "postgres",
@@ -32,3 +28,7 @@ config :mock_server, MockServer.Repo,
   port: 5444
   #hostname: "db",
   #port: "5432"
+
+# Import environment specific config. This must remain at the bottom
+# of this file so it overrides the configuration defined above.
+import_config "#{Mix.env}.exs"

@@ -1,11 +1,12 @@
 import React from "react"
 import CreateRouteForm from "routes/create_form"
 
-const CreateRoute = () => {
+const CreateRoute = (props) => {
+  console.log(props)
   return (
     <div className="container">
       <h2>Create Route</h2>
-      <CreateRouteForm />
+      <CreateRouteForm serverId={props.match.params.serverId} />
     </div>
   )
 }

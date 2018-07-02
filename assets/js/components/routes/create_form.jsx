@@ -16,6 +16,7 @@ export default class CreateRouteForm extends React.PureComponent {
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   handleChange(event) {
@@ -24,7 +25,7 @@ export default class CreateRouteForm extends React.PureComponent {
 
   onSubmit(event) {
     event.preventDefault();
-    return Routes.create()
+    return Routes.create(this.props.serverId, this.state)
   }
 
   render() {
@@ -39,13 +40,17 @@ export default class CreateRouteForm extends React.PureComponent {
           <option value="DELETE">DELETE</option>
         </select>
 
-        <Input type="text" name="path" icon="code" placeholder="URL"/>
-        <TextArea name="description" placeholder="Description"/>
+        <Input type="text" name="path" icon="code" placeholder="URL"
+               onChange={this.handleChange}/>
 
-        <Input type="text" name="statusCode" placeholder="Status Code"/>
+        <TextArea name="description" placeholder="Description"
+                  onChange={this.handleChange}/>
+
+        <Input type="text" name="statusCode" placeholder="Status Code"
+               onChange={this.handleChange}/>
 
         <label>Response Type</label>
-        <select name="responseType">
+        <select name="responseType" onChange={this.handleChange}>
           <option value="application/json">JSON (application/json)</option>
           <option value="text/plain">Text (text/plain)</option>
           <option value="application/javascript">Javascript (application/javascript)</option>
@@ -54,7 +59,7 @@ export default class CreateRouteForm extends React.PureComponent {
           <option value="text/html">HTML</option>
         </select>
 
-        <TextArea name="responseBody" placeholder="Response Body"/>
+        <TextArea name="responseBody" placeholder="Response Body" onChange={this.handleChange}/>
 
         <div>
           <Submit/>

@@ -13,3 +13,7 @@ config :mock_server, MockServer.Repo,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+if (File.exists?(Path.join(__DIR__, "test.secret.exs"))) do
+  import_config "test.secret.exs"
+end

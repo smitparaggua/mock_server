@@ -33,7 +33,7 @@ class ShowServer extends React.PureComponent {
       })
 
     Routes.list(this.state.serverId)
-      .then(response => this.setState({loadingRoutes: false, routes: response.data}))
+      .then(data => this.setState({loadingRoutes: false, routes: data}))
       .catch(error => {
         const response = error.response || {}
         return response.status == 404
@@ -52,9 +52,6 @@ class ShowServer extends React.PureComponent {
 
   renderServer() {
     const server = this.state.server
-    console.log('ssssssss-routes-------')
-    console.log(this.state.routes)
-    console.log('ssssssss-routes-end---')
     if (server) {
       return (
         <div className="container">
@@ -63,11 +60,13 @@ class ShowServer extends React.PureComponent {
             <ButtonLink to={`/servers/${server.id}/routes/new`} icon="plus">Create Route</ButtonLink>
           </div>
 
-          {this.state.routes
-            ? (
+          {this.state.loadingRoutes
+            ? renderLoading()
+            : (
               <ul style={{listStyleType: "none"}}>
                 {this.state.routes.map(route => (
-                  <li style={{}}>
+                  <li style={{}} key={route.id}>
+                    {console.log(route)}
                     <span>{route.method} {route.path}</span>
                     <div style={{fontSize: "smaller", color: "gray"}}>
                       <div>{route.description}</div>
@@ -76,7 +75,6 @@ class ShowServer extends React.PureComponent {
                 ))}
               </ul>
             )
-            : <div>Shit</div>
           }
         </div>
       )
