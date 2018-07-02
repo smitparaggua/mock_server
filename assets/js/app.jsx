@@ -18,6 +18,7 @@
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import "babel-polyfill"
 import React from "react"
 import ReactDom from "react-dom"
 import {BrowserRouter} from "react-router-dom"

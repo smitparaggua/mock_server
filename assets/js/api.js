@@ -1,4 +1,5 @@
 import axios from "axios"
+import {camelizeKeys, decamelizeKeys} from "humps"
 
 const Servers = {
   create({name, path, description}) {
@@ -13,15 +14,13 @@ const Servers = {
 const Routes = {
   list(serverId) {
     return axios.get(`/api/servers/${serverId}/routes`)
+      .then(response => response.data)
   },
 
   create(serverId, params) {
-    console.log('hahahaha')
-    console.log('hahahaha')
-    console.log('hahahaha')
-    console.log(serverId)
-    console.log(params)
+    params = decamelizeKeys(params)
     return axios.post(`/api/servers/${serverId}/routes`, params)
+      .then(response => response.data)
   }
 }
 
