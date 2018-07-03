@@ -12,7 +12,8 @@ export default class CreateRouteForm extends React.PureComponent {
       method: "GET",
       path: "",
       description: "",
-      responseType: "application/json"
+      responseType: "application/json",
+      created: false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -26,9 +27,13 @@ export default class CreateRouteForm extends React.PureComponent {
   onSubmit(event) {
     event.preventDefault();
     return Routes.create(this.props.serverId, this.state)
+      .then(() => this.setState({created: true}))
   }
 
   render() {
+    if (this.state.created) {
+      return <Redirect to={`/servers/${this.props.serverId}`}/>
+    }
     return (
       <form onSubmit={this.onSubmit}>
         <label>Method</label>

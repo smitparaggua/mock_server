@@ -61,12 +61,11 @@ class ShowServer extends React.PureComponent {
           </div>
 
           {this.state.loadingRoutes
-            ? renderLoading()
+            ? this.renderLoading()
             : (
               <ul style={{listStyleType: "none"}}>
                 {this.state.routes.map(route => (
                   <li style={{}} key={route.id}>
-                    {console.log(route)}
                     <span>{route.method} {route.path}</span>
                     <div style={{fontSize: "smaller", color: "gray"}}>
                       <div>{route.description}</div>
