@@ -1,6 +1,6 @@
 import React from "react"
 import {Input, inputStyle} from "./input"
-import {Link} from "react-router-dom"
+import {Link, withRouter} from "react-router-dom"
 
 const style = {
   borderRadius: inputStyle.borderRadius,
@@ -10,19 +10,17 @@ const style = {
   cursor: "pointer"
 }
 
-const Button = ({children}) => {
-  return <button style={style}>{children}</button>
+const Button = ({children, ...others}) => {
+  return <button style={style} {...others}>{children}</button>
 }
 
-const ButtonLink = ({children, to, icon}) => {
+const ButtonLink = withRouter(({children, to, icon, history}) => {
   return (
-    <Button>
-      <Link to={to} style={{textDecoration: "none"}}>
-        <i className={`fa fa-${icon}`} style={{color: "gray"}}></i> {children}
-      </Link>
+    <Button onClick={() => console.log(to) || history.push(to)}>
+      <i className={`fa fa-${icon}`} style={{color: "gray"}}></i> {children}
     </Button>
   )
-}
+})
 
 export {Button, ButtonLink}
 export default Button
