@@ -16,7 +16,7 @@ const Button = ({children, ...others}) => {
 
 const ButtonLink = withRouter(({children, to, icon, history}) => {
   return (
-    <Button onClick={() => console.log(to) || history.push(to)}>
+    <Button onClick={() => history.push(to)}>
       <i className={`fa fa-${icon}`} style={{color: "gray"}}></i> {children}
     </Button>
   )
