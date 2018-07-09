@@ -1,5 +1,5 @@
 defmodule MockServer.Servers.RouteTest do
-  use MockServer.DataCase
+  use MockServer.DataCase, async: true
 
   alias MockServer.Servers.Route
 
@@ -68,8 +68,7 @@ defmodule MockServer.Servers.RouteTest do
   test "rejects invalid response types" do
     changeset = changeset_with(:response_type, "not valid")
     refute changeset.valid?
-    errors = error_validators(changeset, :response_type)
-    assert {:validation, :http_response_type} in errors
+    assert "is not a valid HTTP response type" in errors_on(changeset).response_type
   end
 
   defp changeset_with(field, value) do
@@ -79,7 +78,6 @@ defmodule MockServer.Servers.RouteTest do
   end
 
   def error_validators(changeset, attribute) do
-    IO.inspect(changeset)
     elem(changeset.errors[attribute], 1)
   end
 end
