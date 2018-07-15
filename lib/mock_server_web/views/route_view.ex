@@ -12,8 +12,8 @@ defmodule MockServerWeb.RouteView do
   end
 
   def render("route.json", d%{changeset}) do
-    Enum.reduce(changeset.errors, %{}, fn ({key, {msg, opts}}, acc) ->
-      Map.update(acc, key, [], &([msg] ++ &1))
+    Enum.reduce(changeset.errors, %{}, fn ({key, {msg, _opts}}, acc) ->
+      Map.update(acc, key, [msg], &([msg] ++ &1))
     end)
   end
 
