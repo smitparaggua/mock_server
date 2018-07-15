@@ -5,14 +5,19 @@ defmodule MockServerWeb.RouteControllerTest do
   alias MockServer.TestSupport.ServersFactory
 
   describe "create" do
-    test "create route returns the route created", d%{conn} do
+    setup d%{conn} do
       server = ServersFactory.create()
+      create_route = &post(conn, server_route_path(conn, :create, server.id), &1)
+      {:ok, d%{server, conn, create_route}}
+    end
+
+    test "create route returns the route created", d%{conn, server} do
       route = %{
         method: "GET",
         path: "/some-route",
         description: "Test route",
         status_code: 200,
-        response_type: "json",
+        response_type: "application/json",
         response_body: ~S({"hello": "world"})
       }
 
@@ -20,7 +25,6 @@ defmodule MockServerWeb.RouteControllerTest do
         conn
         |> post(server_route_path(conn, :create, server.id), route)
         |> json_response(201)
-        |> KeyConvert.snake_case()
 
       assert body["id"]
       assert body["server_id"] == server.id
@@ -29,9 +33,20 @@ defmodule MockServerWeb.RouteControllerTest do
         "path" => "/some-route",
         "description" => "Test route",
         "status_code" => 200,
-        "response_type" => "json",
+        "response_type" => "application/json",
         "response_body" => ~S({"hello": "world"})
       } = body
+    end
+
+    test "returns error when route is invalid", d%{create_route} do
+      body = %{} |> create_route.() |> json_response(400)
+      assert body == %{
+        "method" => ["can't be blank"],
+        "path" => ["can't be blank"],
+        "status_code" => ["can't be blank"],
+        "response_type" => ["can't be blank"],
+        "response_body" => ["can't be blank"]
+      }
     end
   end
 
@@ -60,7 +75,7 @@ defmodule MockServerWeb.RouteControllerTest do
       path: "/some-route",
       description: "Test route",
       status_code: 200,
-      response_type: "json",
+      response_type: "application/json",
       response_body: ~S({"hello": "world"})
     }
 

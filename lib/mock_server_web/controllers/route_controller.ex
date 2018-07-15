@@ -5,10 +5,18 @@ defmodule MockServerWeb.RouteController do
   alias MockServer.Servers
 
   def create(conn, params) do
-    {:ok, route} = Servers.add_route(params["server_id"], params)
-    conn
-    |> put_status(:created)
-    |> render("route.json", d%{route})
+    case Servers.add_route(params["server_id"], params) do
+      {:ok, route} ->
+        conn
+        |> put_status(:created)
+        |> render("route.json", d%{route})
+
+      {:error, changeset} ->
+        conn
+        |> put_status(:bad_request)
+        |> render("route.json", d%{changeset})
+    end
+    # {:ok, route} = Servers.add_route(params["server_id"], params)
   end
 
   def index(conn, params) do

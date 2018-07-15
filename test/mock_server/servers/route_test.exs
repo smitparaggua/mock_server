@@ -7,7 +7,7 @@ defmodule MockServer.Servers.RouteTest do
     method: "GET",
     path: "/sample",
     status_code: 200,
-    response_type: "text",
+    response_type: "text/plain",
     response_body: "hello, world"
   }
 
