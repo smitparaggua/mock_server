@@ -41,11 +41,15 @@ defmodule MockServerWeb.RouteControllerTest do
     test "returns error when route is invalid", d%{create_route} do
       body = %{} |> create_route.() |> json_response(400)
       assert body == %{
-        "method" => ["can't be blank"],
-        "path" => ["can't be blank"],
-        "status_code" => ["can't be blank"],
-        "response_type" => ["can't be blank"],
-        "response_body" => ["can't be blank"]
+        "code" => "0001",
+        "message" => "Invalid Parameters",
+        "details" => %{
+          "method" => ["can't be blank"],
+          "path" => ["can't be blank"],
+          "status_code" => ["can't be blank"],
+          "response_type" => ["can't be blank"],
+          "response_body" => ["can't be blank"]
+        }
       }
     end
   end

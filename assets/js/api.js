@@ -1,5 +1,6 @@
 import axios from "axios"
 import {camelizeKeys, decamelizeKeys} from "humps"
+import {get} from "utils/object_utils"
 
 const Servers = {
   create({name, path, description}) {
@@ -20,6 +21,7 @@ const Routes = {
   create(serverId, params) {
     params = decamelizeKeys(params)
     return axios.post(`/api/servers/${serverId}/routes`, params)
+      .catch(error => Promise.reject(get(error, "response.data")))
       .then(response => response.data)
   }
 }

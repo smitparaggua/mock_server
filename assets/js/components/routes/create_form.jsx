@@ -4,6 +4,47 @@ import {Input} from "components/input"
 import {TextArea} from "components/text_area"
 import {Submit} from "components/submit"
 import {Routes} from "api"
+import {get} from "utils/object_utils"
+import styled from "styled-components"
+import {Dropdown} from "components/dropdown"
+
+const Form = styled.div`
+  div {
+    width: 100%;
+  }
+`
+
+const GroupedInput = styled.div`
+  display: flex;
+
+  * {
+    border-radius: 0;
+  }
+
+  button:first-child,
+  input:first-child {
+    border-radius: 4px 0 0 4px;
+  }
+
+  button:last-child,
+  input:last-child {
+    border-radius: 0 4px 4px 0;
+  }
+`
+
+const MethodSelection = styled(Dropdown)`
+  flex-basis: 130px;
+`
+const UrlInput = styled(Input)`
+  flex-grow: 3;
+`
+
+const TextWithSelection = () => (
+  <GroupedInput>
+    <MethodSelection />
+    <UrlInput icon="code"/>
+  </GroupedInput>
+)
 
 export default class CreateRouteForm extends React.PureComponent {
   constructor(props) {
@@ -13,7 +54,8 @@ export default class CreateRouteForm extends React.PureComponent {
       path: "",
       description: "",
       responseType: "application/json",
-      created: false
+      created: false,
+      error: null
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -28,6 +70,7 @@ export default class CreateRouteForm extends React.PureComponent {
     event.preventDefault();
     return Routes.create(this.props.serverId, this.state)
       .then(() => this.setState({created: true}))
+      .catch(error => this.setState({error}))
   }
 
   render() {
@@ -35,41 +78,55 @@ export default class CreateRouteForm extends React.PureComponent {
       return <Redirect to={`/servers/${this.props.serverId}`}/>
     }
     return (
-      <form onSubmit={this.onSubmit}>
-        <label>Method</label>
-        <select name="method" onChange={this.handleChange}>
-          <option value="GET">GET</option>
-          <option value="POST">POST</option>
-          <option value="PUT">PUT</option>
-          <option value="PATCH">PATCH</option>
-          <option value="DELETE">DELETE</option>
-        </select>
+      <div>
+        <TextWithSelection />
+        {renderError(this.state.error)}
+        <form onSubmit={this.onSubmit}>
+          <label>Method</label>
+          <select name="method" onChange={this.handleChange}>
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+          </select>
 
-        <Input type="text" name="path" icon="code" placeholder="URL"
-               onChange={this.handleChange}/>
+          <Input type="text" name="path" icon="code" placeholder="URL"
+                onChange={this.handleChange}/>
 
-        <TextArea name="description" placeholder="Description"
-                  onChange={this.handleChange}/>
+          <TextArea name="description" placeholder="Description"
+                    onChange={this.handleChange}/>
 
-        <Input type="text" name="statusCode" placeholder="Status Code"
-               onChange={this.handleChange}/>
+          <Input type="text" name="statusCode" placeholder="Status Code"
+                onChange={this.handleChange}/>
 
-        <label>Response Type</label>
-        <select name="responseType" onChange={this.handleChange}>
-          <option value="application/json">JSON (application/json)</option>
-          <option value="text/plain">Text (text/plain)</option>
-          <option value="application/javascript">Javascript (application/javascript)</option>
-          <option value="application/xml">XML (application/xml)</option>
-          <option value="text/xml">XML (text/xml)</option>
-          <option value="text/html">HTML</option>
-        </select>
+          <label>Response Type</label>
+          <select name="responseType" onChange={this.handleChange}>
+            <option value="application/json">JSON (application/json)</option>
+            <option value="text/plain">Text (text/plain)</option>
+            <option value="application/javascript">Javascript (application/javascript)</option>
+            <option value="application/xml">XML (application/xml)</option>
+            <option value="text/xml">XML (text/xml)</option>
+            <option value="text/html">HTML</option>
+          </select>
 
-        <TextArea name="responseBody" placeholder="Response Body" onChange={this.handleChange}/>
+          <TextArea name="responseBody" placeholder="Response Body" onChange={this.handleChange}/>
 
-        <div>
-          <Submit/>
-        </div>
-      </form>
+          <div>
+            <Submit/>
+          </div>
+        </form>
+      </div>
     )
   }
+}
+
+function renderError(error) {
+  console.log(error)
+  const errorMessage = get(error, 'message')
+  return errorMessage && (
+    <div>
+      {errorMessage}
+    </div>
+  )
 }

@@ -16,7 +16,6 @@ defmodule MockServerWeb.RouteController do
         |> put_status(:bad_request)
         |> render("route.json", d%{changeset})
     end
-    # {:ok, route} = Servers.add_route(params["server_id"], params)
   end
 
   def index(conn, params) do

@@ -12,9 +12,11 @@ defmodule MockServerWeb.RouteView do
   end
 
   def render("route.json", d%{changeset}) do
-    Enum.reduce(changeset.errors, %{}, fn ({key, {msg, _opts}}, acc) ->
+    details = Enum.reduce(changeset.errors, %{}, fn ({key, {msg, _opts}}, acc) ->
       Map.update(acc, key, [msg], &([msg] ++ &1))
     end)
+
+    %{code: "0001", message: "Invalid Parameters", details: details}
   end
 
   def render("routes.json", d%{routes}) do

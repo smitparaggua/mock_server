@@ -1,18 +1,18 @@
 import React from "react"
-import {Input, inputStyle} from "./input"
+import {Input} from "./input"
 import {Link, withRouter} from "react-router-dom"
+import styled from "styled-components"
 
-const style = {
-  borderRadius: inputStyle.borderRadius,
-  padding: inputStyle.padding,
-  lineHeight: inputStyle.lineHeight,
-  fontSize: inputStyle.fontSize,
-  cursor: "pointer"
-}
-
-const Button = ({children, ...others}) => {
-  return <button style={style} {...others}>{children}</button>
-}
+const Button = styled.button`
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgb(0, 0, 0, 0.075);
+  padding: 6px 12px;
+  line-height: 1.42;
+  font-size: .8em;
+  box-sizing: border-box;
+  cursor: pointer;
+`
 
 const ButtonLink = withRouter(({children, to, icon, history}) => {
   return (

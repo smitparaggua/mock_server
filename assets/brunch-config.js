@@ -61,7 +61,8 @@ exports.config = {
           alias: {
             "remote_routes": "./js/remote_routes",
             "errors": "./js/components/errors",
-            "routes": "./js/components/routes"
+            "routes": "./js/components/routes",
+            "utils": "./js/utils"
           }
         }]
       ]
