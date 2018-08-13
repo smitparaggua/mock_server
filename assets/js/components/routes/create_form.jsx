@@ -17,7 +17,7 @@ const Form = styled.div`
 const GroupedInput = styled.div`
   display: flex;
 
-  * {
+  button, input {
     border-radius: 0;
   }
 

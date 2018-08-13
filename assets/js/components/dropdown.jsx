@@ -1,22 +1,38 @@
 import React from "react"
 import Button from "components/button"
-import styled from "styled-components"
+import styled, {css} from "styled-components"
+import {withStateHandlers, withState, compose, withHandlers} from "recompose"
 
 const Icon = ({icon}) => (
   <i className={`fa fa-${icon}`}></i>
 )
 
 const Selection = styled.ul`
-  border: 1px gray solid;
+  border: 1px #ccc solid;
   list-style: none;
   position: absolute;
+  margin: 0;
+  z-index: 2;
+  background-color: white;
+  border-radius: 0 0 5px 5px;
+  padding: 0;
+  display: none;
+
+  ${props => props.active && css`
+    display: block;
+  `}
 `
 
 const SelectionItem = styled.li`
+  padding: 5px 20px;
+
+  &:hover {
+    background-color: #eee;
+  }
 `
 
-const MethodSelection = () => (
-  <Selection>
+const MethodSelection = ({active}) => (
+  <Selection active={active}>
     <SelectionItem>GET</SelectionItem>
     <SelectionItem>POST</SelectionItem>
     <SelectionItem>PUT</SelectionItem>
@@ -25,17 +41,18 @@ const MethodSelection = () => (
   </Selection>
 )
 
-export const Dropdown = ({className, selection}) => (
-  <div>
-    <Button className={className} onClick={showSelection(selection)}>
-      GET <Icon icon="angle-down"/>
-    </Button>
-    <MethodSelection />
-  </div>
+const addToggleActive = compose(
+  withState('active', 'setActive', false),
+  withHandlers({
+    toggleActive: ({setActive}) => setActive(active => !active)
+  })
 )
 
-function showSelection(selection) {
-  return function () {
-    
-  }
-}
+export const Dropdown = addToggleActive(({className, selection, active, toggleActive}) => (
+  <div>
+    <Button className={className} onClick={toggleActive}>
+      GET <Icon icon="angle-down"/>
+    </Button>
+    <MethodSelection active={active}/>
+  </div>
+))
