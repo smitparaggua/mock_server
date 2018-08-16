@@ -9,9 +9,10 @@ const Button = styled.button`
   box-shadow: inset 0 1px 1px rgb(0, 0, 0, 0.075);
   padding: 6px 12px;
   line-height: 1.42;
-  font-size: .8em;
+  font-size: 1em;
   box-sizing: border-box;
   cursor: pointer;
+  outline: none;
 `
 
 const ButtonLink = withRouter(({children, to, icon, history}) => {

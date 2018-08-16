@@ -1,7 +1,7 @@
 import React from "react"
 import Button from "components/button"
 import styled, {css} from "styled-components"
-import {withStateHandlers, withState, compose, withHandlers} from "recompose"
+import {lifecycle, withStateHandlers, withState, compose, withHandlers} from "recompose"
 
 const Icon = ({icon}) => (
   <i className={`fa fa-${icon}`}></i>
@@ -25,34 +25,62 @@ const Selection = styled.ul`
 
 const SelectionItem = styled.li`
   padding: 5px 20px;
+  cursor: pointer;
 
   &:hover {
     background-color: #eee;
   }
 `
+const noop = () => {}
 
-const MethodSelection = ({active}) => (
+const MethodSelection = ({active, onChange = noop}) => (
   <Selection active={active}>
-    <SelectionItem>GET</SelectionItem>
-    <SelectionItem>POST</SelectionItem>
-    <SelectionItem>PUT</SelectionItem>
-    <SelectionItem>PATCH</SelectionItem>
-    <SelectionItem>DELETE</SelectionItem>
+    <SelectionItem onClick={() => onChange({value: "GET"})}>GET</SelectionItem>
+    <SelectionItem onClick={() => onChange({value: "POST"})}>POST</SelectionItem>
+    <SelectionItem onClick={() => onChange({value: "PUT"})}>PUT</SelectionItem>
+    <SelectionItem onClick={() => onChange({value: "PATCH"})}>PATCH</SelectionItem>
+    <SelectionItem onClick={() => onChange({value: "DELETE"})}>DELETE</SelectionItem>
   </Selection>
 )
 
-const addToggleActive = compose(
-  withState('active', 'setActive', false),
-  withHandlers({
-    toggleActive: ({setActive}) => setActive(active => !active)
+const addDropdownHandlers = compose(
+  withStateHandlers(
+    {active: false, value: "GET"},
+    {
+      dismiss: ({active}) => () => ({active: false}),
+      toggleActive: ({active}) => () => ({active: !active}),
+      setValue: ({value}) => (newValue) => ({value: newValue})
+    }
+  ),
+
+  lifecycle({
+    componentDidMount() {
+      document.addEventListener("click", dismiss)
+    },
+
+    componentWillUnmount() {
+      document.removeEventListener("click", dismiss)
+    }
   })
 )
 
-export const Dropdown = addToggleActive(({className, selection, active, toggleActive}) => (
-  <div>
-    <Button className={className} onClick={toggleActive}>
-      GET <Icon icon="angle-down"/>
-    </Button>
-    <MethodSelection active={active}/>
-  </div>
-))
+function dismiss() {
+  // this.setState({active: false})
+}
+
+export const Dropdown = addDropdownHandlers(
+  ({value, setValue, className, selection, active, toggleActive, onChange = noop, choices}) => (
+    <div>
+      <Button className={className} onClick={toggleActive}>
+        {value} <Icon icon="angle-down"/>
+      </Button>
+      <Selection>
+        {choices && choices.forEach(choice => (
+          <SelectionItem onClick={() => onChange({value: choice.value})}>
+            {choice.text}
+          </SelectionItem>
+        ))}
+      </Selection>
+    </div>
+  )
+)

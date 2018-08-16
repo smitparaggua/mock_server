@@ -19,6 +19,7 @@ const GroupedInput = styled.div`
 
   button, input {
     border-radius: 0;
+    height: 100%;
   }
 
   button:first-child,
@@ -39,9 +40,17 @@ const UrlInput = styled(Input)`
   flex-grow: 3;
 `
 
+const httpMethods = [
+  {value: "GET", text: "GET"},
+  {value: "POST", text: "POST"},
+  {value: "PUT", text: "PUT"},
+  {value: "PATCH", text: "PATCH"},
+  {value: "DELETE", text: "DELETE"},
+]
+
 const TextWithSelection = () => (
   <GroupedInput>
-    <MethodSelection />
+    <MethodSelection onChange={console.log} choices={httpMethods}/>
     <UrlInput icon="code"/>
   </GroupedInput>
 )
