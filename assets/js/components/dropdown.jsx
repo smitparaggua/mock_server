@@ -31,56 +31,84 @@ const SelectionItem = styled.li`
     background-color: #eee;
   }
 `
-const noop = () => {}
 
-const MethodSelection = ({active, onChange = noop}) => (
-  <Selection active={active}>
-    <SelectionItem onClick={() => onChange({value: "GET"})}>GET</SelectionItem>
-    <SelectionItem onClick={() => onChange({value: "POST"})}>POST</SelectionItem>
-    <SelectionItem onClick={() => onChange({value: "PUT"})}>PUT</SelectionItem>
-    <SelectionItem onClick={() => onChange({value: "PATCH"})}>PATCH</SelectionItem>
-    <SelectionItem onClick={() => onChange({value: "DELETE"})}>DELETE</SelectionItem>
-  </Selection>
-)
+const DropdownButton = styled(Button)`
+  background-color: #eee;
 
-const addDropdownHandlers = compose(
-  withStateHandlers(
-    {active: false, value: "GET"},
-    {
-      dismiss: ({active}) => () => ({active: false}),
-      toggleActive: ({active}) => () => ({active: !active}),
-      setValue: ({value}) => (newValue) => ({value: newValue})
+  ${props => props.active && css`
+    background-color: #fff;
+  `}
+`
+
+export class Dropdown extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedChoice: props.choices[0],
+      active: false
     }
-  ),
+    this.toggleActive = this.toggleActive.bind(this)
+    this.onChange = props.onChange || noop
+    this.dismiss = this.dismiss.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this)
+    this.selectionRef = React.createRef()
+    this.buttonRef = React.createRef()
+  }
 
-  lifecycle({
-    componentDidMount() {
-      document.addEventListener("click", dismiss)
-    },
+  componentDidMount() {
+    document.addEventListener("click", this.handleClickOutside)
+  }
 
-    componentWillUnmount() {
-      document.removeEventListener("click", dismiss)
+  componentWillUnmount() {
+    document.removeEventListener("click", this.handleClickOutside)
+  }
+
+  toggleActive(event) {
+    event.preventDefault()
+    this.setState({
+      active: !this.state.active
+    })
+  }
+
+  onItemSelect(selected) {
+    return () => {
+      this.onChange(selected)
+      this.setState({selectedChoice: selected})
+      this.dismiss()
     }
-  })
-)
+  }
 
-function dismiss() {
-  // this.setState({active: false})
-}
+  dismiss() {
+    this.setState({active: false})
+  }
 
-export const Dropdown = addDropdownHandlers(
-  ({value, setValue, className, selection, active, toggleActive, onChange = noop, choices}) => (
-    <div>
-      <Button className={className} onClick={toggleActive}>
-        {value} <Icon icon="angle-down"/>
-      </Button>
-      <Selection>
-        {choices && choices.forEach(choice => (
-          <SelectionItem onClick={() => onChange({value: choice.value})}>
+  handleClickOutside(event) {
+    const clickLocation = event.target
+    const selection = this.selectionRef.current
+    const button = this.buttonRef.current
+    if (!button.contains(clickLocation) && !selection.contains(clickLocation)) {
+      this.dismiss()
+    }
+  }
+
+  render() {
+    const choices = this.props.choices
+    const active = this.state.active
+    return <div>
+      <DropdownButton className={this.props.className} onClick={this.toggleActive}
+        innerRef={this.buttonRef} active={active}>
+        {this.state.selectedChoice.text} <Icon icon="angle-down"/>
+      </DropdownButton>
+
+      <Selection active={active} innerRef={this.selectionRef}>
+        {choices && choices.map(choice => (
+          <SelectionItem onClick={this.onItemSelect(choice)} key={choice.value}>
             {choice.text}
           </SelectionItem>
         ))}
       </Selection>
     </div>
-  )
-)
+  }
+}
+
+function noop() { }

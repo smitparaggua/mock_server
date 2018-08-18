@@ -33,9 +33,6 @@ const GroupedInput = styled.div`
   }
 `
 
-const MethodSelection = styled(Dropdown)`
-  flex-basis: 130px;
-`
 const UrlInput = styled(Input)`
   flex-grow: 3;
 `
@@ -48,9 +45,9 @@ const httpMethods = [
   {value: "DELETE", text: "DELETE"},
 ]
 
-const TextWithSelection = () => (
+const MethodSelection = ({onChange = noop}) => (
   <GroupedInput>
-    <MethodSelection onChange={console.log} choices={httpMethods}/>
+    <Dropdown onChange={onChange} choices={httpMethods}/>
     <UrlInput icon="code"/>
   </GroupedInput>
 )
@@ -68,7 +65,12 @@ export default class CreateRouteForm extends React.PureComponent {
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.handleChangeOf = this.handleChangeOf.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  handleChangeOf(inputName) {
+    return ({value}) => this.setState({[inputName]: value})
   }
 
   handleChange(event) {
@@ -88,9 +90,9 @@ export default class CreateRouteForm extends React.PureComponent {
     }
     return (
       <div>
-        <TextWithSelection />
         {renderError(this.state.error)}
         <form onSubmit={this.onSubmit}>
+          <MethodSelection name="method" onChange={this.handleChangeOf("method")}/>
           <label>Method</label>
           <select name="method" onChange={this.handleChange}>
             <option value="GET">GET</option>
@@ -131,7 +133,6 @@ export default class CreateRouteForm extends React.PureComponent {
 }
 
 function renderError(error) {
-  console.log(error)
   const errorMessage = get(error, 'message')
   return errorMessage && (
     <div>
@@ -139,3 +140,6 @@ function renderError(error) {
     </div>
   )
 }
+
+
+function noop() { }
