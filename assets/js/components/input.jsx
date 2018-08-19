@@ -2,9 +2,7 @@ import React from "react"
 import styled from "styled-components";
 
 export const inputStyle = {
-  // width: "100%",
   border: "1px solid #ccc",
-  // borderRadius: "4px",
   boxShadow: "inset 0 1px 1px rgb(0, 0, 0, 0.075)",
   padding: "6px 12px",
   lineHeight: "1.42",
@@ -31,7 +29,6 @@ export const Input = (props) => {
 
 const InputGroup = ({icon, ...otherProps, className}) => {
   const containerStyle = {
-    // marginBottom: "15px",
     position: "relative"
   }
   const iconStyle = {
@@ -40,7 +37,7 @@ const InputGroup = ({icon, ...otherProps, className}) => {
     left: "0.8em",
     color: "gray"
   }
-  const inputStyle = icon && {paddingLeft: "2.5em", width: "100%"}
+  const inputStyle = icon && {paddingLeft: "2.5em", width: "100%", height: "100%"}
 
   return (
     <div style={containerStyle} className={className}>
@@ -49,3 +46,26 @@ const InputGroup = ({icon, ...otherProps, className}) => {
     </div>
   )
 }
+
+export const GroupedInput = styled.div`
+  display: flex;
+  align-content: stretch;
+
+  button, input {
+    border-radius: 0;
+  }
+
+  button:first-child,
+  input:first-child {
+    border-radius: 4px 0 0 4px;
+  }
+
+  button:last-child,
+  input:last-child {
+    border-radius: 0 4px 4px 0;
+  }
+
+  > div, > input {
+    flex-grow: 1;
+  }
+`

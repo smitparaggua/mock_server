@@ -21,8 +21,8 @@ const Routes = {
   create(serverId, params) {
     params = decamelizeKeys(params)
     return axios.post(`/api/servers/${serverId}/routes`, params)
-      .catch(error => Promise.reject(get(error, "response.data")))
-      .then(response => response.data)
+      .catch(error => Promise.reject(camelizeKeys(get(error, "response.data"))))
+      .then(response => camelizeKeys(response.data))
   }
 }
 

@@ -34,6 +34,8 @@ const SelectionItem = styled.li`
 
 const DropdownButton = styled(Button)`
   background-color: #eee;
+  height: 100%;
+  width: 100%;
 
   ${props => props.active && css`
     background-color: #fff;
@@ -94,8 +96,8 @@ export class Dropdown extends React.Component {
   render() {
     const choices = this.props.choices
     const active = this.state.active
-    return <div>
-      <DropdownButton className={this.props.className} onClick={this.toggleActive}
+    return <div className={this.props.className}>
+      <DropdownButton onClick={this.toggleActive}
         innerRef={this.buttonRef} active={active}>
         {this.state.selectedChoice.text} <Icon icon="angle-down"/>
       </DropdownButton>
