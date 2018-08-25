@@ -42,7 +42,8 @@ defmodule MockServer.Mixfile do
       {:uuid, "~> 1.1.8"},
       {:ecto, "~> 2.2"},
       {:postgrex, "~> 0.13"},
-      {:key_convert, "~> 0.3.0"}
+      {:key_convert, "~> 0.3.0"},
+      {:httpoison, "~> 1.2"}
     ]
   end
 end

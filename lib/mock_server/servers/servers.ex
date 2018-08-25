@@ -19,4 +19,9 @@ defmodule MockServer.Servers do
   def list_routes(server_id) do
     Repo.all(Route)
   end
+
+  def run(server) do
+    # TODO SMIT stopped here
+    DynamicSupervisor.start_child()
+  end
 end
