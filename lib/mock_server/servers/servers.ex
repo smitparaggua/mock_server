@@ -1,6 +1,9 @@
 defmodule MockServer.Servers do
   alias MockServer.Repo
-  alias MockServer.Servers.{Server, Query, Route}
+  alias MockServer.Servers.{
+    Server, Query, Route, RunningServer, RunningServerSupervisor,
+    RunningRegistry
+  }
 
   def create(params) do
     Server.changeset(%Server{}, params)
@@ -21,7 +24,17 @@ defmodule MockServer.Servers do
   end
 
   def run(server) do
-    # TODO SMIT stopped here
-    DynamicSupervisor.start_child()
+    server = Repo.preload(server, :routes)
+    {:ok, pid} = DynamicSupervisor.start_child(
+      RunningServerSupervisor, {RunningServer, server}
+    )
+
+    RunningRegistry.register(server.id, pid)
+  end
+
+  def access_path(server, method, path) do
+    server.id
+    |> RunningRegistry.pid_of()
+    |> RunningServer.access_path(method, path)
   end
 end

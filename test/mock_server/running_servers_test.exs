@@ -1,7 +1,9 @@
 defmodule MockServer.RunningServerTest do
   use MockServer.DataCase
   alias MockServer.Servers
+  alias Servers.{RunningServerSupervisor, RunningRegistry}
 
+  @tag :wip
   test "created servers should be accessible" do
     {:ok, server} = Servers.create(%{name: "Server 1", path: "/server"})
     route_attrs = %{
@@ -11,16 +13,14 @@ defmodule MockServer.RunningServerTest do
       response_type: "application/json",
       response_body: ~S({"hello": "world"})
     }
-    {:ok, route} = Servers.add_route(route_attrs)
-    # I should be able to start_link it since I'll use start_supervised
-    # Sooo.... Running it should be like start_link(<route_info>) ?
-    # Servers.run(server.id)
-    # start_supervised({Servers.MockServer, <route_info>}) when testing one server
-    # start Servers.Supervisor instead when using Servers.run(server.id)
-    #   since it will attach to a named supervisor
-    start_supervised(DynamicSupervisor, name: MockServer.Servers.Supervisor)
+    {:ok, route} = Servers.add_route(server.id, route_attrs)
+    start_supervised!(
+      {DynamicSupervisor, name: RunningServerSupervisor, strategy: :one_for_one}
+    )
+
+    start_supervised!(RunningRegistry)
     Servers.run(server)
-    assert Servers.access_path(server, "/hello") == %{
+    assert Servers.access_path(server, "GET", "/hello") == %{
       status_code: 200,
       response_type: "application/json",
       response_body: ~S({"hello": "world"})
