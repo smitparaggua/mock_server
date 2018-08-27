@@ -1,4 +1,3 @@
 alias MockServer.Repo
 alias MockServer.Servers
-alias Servers.Route
-alias Servers.Server
+alias Servers.{Route, Server}

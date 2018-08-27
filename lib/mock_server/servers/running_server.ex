@@ -18,12 +18,24 @@ defmodule MockServer.Servers.RunningServer do
   end
 
   def handle_call({:access_path, method, path}, _from, state) do
-    route = Enum.at(state.routes, 0)
-    result = %{
-      status_code: route.status_code,
-      response_type: route.response_type,
-      response_body: route.response_body
-    }
+    route = Enum.find(state.routes, fn route ->
+      route.method == method && route.path == path
+    end)
+
+    result =
+      if route do
+        %{
+          status_code: route.status_code,
+          response_type: route.response_type,
+          response_body: route.response_body
+        }
+      else
+        %{
+          status_code: 404,
+          response_type: "text/plain",
+          response_body: "Not found"
+        }
+      end
 
     {:reply, result, state}
   end
