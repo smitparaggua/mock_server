@@ -18,6 +18,7 @@ defmodule MockServer.Servers.RunningServer do
   end
 
   def handle_call({:access_path, method, path}, _from, state) do
+    [path | _query] = String.split(path, "?", parts: 2)
     route = Enum.find(state.routes, fn route ->
       route.method == method && route.path == path
     end)
