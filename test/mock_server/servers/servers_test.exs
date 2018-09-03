@@ -88,4 +88,16 @@ defmodule MockServer.ServersTest do
 
     Map.merge(default, custom)
   end
+
+  describe "extract_server_path" do
+    test "returns root subpath when accessing server path only" do
+      result = Servers.extract_server_path("/server")
+      assert result == {"/server", "/"}
+    end
+
+    test "returns root path as server and subpath as path" do
+      result = Servers.extract_server_path("/server/subpath/123")
+      assert result == {"/server", "/subpath/123"}
+    end
+  end
 end

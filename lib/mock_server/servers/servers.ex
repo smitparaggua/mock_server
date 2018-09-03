@@ -19,7 +19,7 @@ defmodule MockServer.Servers do
     |> Repo.insert()
   end
 
-  def list_routes(server_id) do
+  def list_routes(_server_id) do
     Repo.all(Route)
   end
 
@@ -36,5 +36,11 @@ defmodule MockServer.Servers do
     server.id
     |> RunningRegistry.pid_of()
     |> RunningServer.access_path(method, path)
+  end
+
+  # Routing
+  def extract_server_path(path) do
+    :binary.match()
+    {path, "/"}
   end
 end

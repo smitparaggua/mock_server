@@ -13,6 +13,20 @@ defmodule MockServerWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :any do
+    plug :accepts, ["html", "json"]
+  end
+
+  scope "/access", MockServerWeb do
+    pipe_through :any
+
+    get "/*path", ServerController, :access
+    post "/*path", ServerController, :access
+    put "/*path", ServerController, :access
+    patch "/*path", ServerController, :access
+    delete "/*path", ServerController, :access
+  end
+
   scope "/api", MockServerWeb do
     pipe_through :api
     resources "/servers", ServerController, only: [:create, :show, :index] do

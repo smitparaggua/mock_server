@@ -8,10 +8,13 @@ defmodule MockServer.Application do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Start the endpoint when the application starts
       supervisor(MockServerWeb.Endpoint, []),
-      # Start your own worker by calling: MockServer.Worker.start_link(arg1, arg2, arg3)
-      supervisor(MockServer.Repo, [])
+      supervisor(MockServer.Repo, []),
+      worker(MockServer.Servers.RunningRegistry, []),
+      supervisor(
+        DynamicSupervisor, [[strategy: :one_for_one]],
+        name: MockServer.Servers.RunningServerSupervisor
+      )
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

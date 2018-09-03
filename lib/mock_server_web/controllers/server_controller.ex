@@ -21,4 +21,9 @@ defmodule MockServerWeb.ServerController do
     servers = Servers.list()
     render(conn, "servers.json", %{servers: servers})
   end
+
+  def access(conn, params) do
+    {server, path} = Servers.extract_server_path(params["path"])
+    Servers.access_path(server, conn.method, path)
+  end
 end

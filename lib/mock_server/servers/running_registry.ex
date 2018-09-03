@@ -1,6 +1,10 @@
 defmodule MockServer.Servers.RunningRegistry do
   use Agent
 
+  def start_link() do
+    start_link([])
+  end
+
   def start_link(opts) do
     Agent.start_link(fn -> %{} end, [name: __MODULE__] ++ opts)
   end
