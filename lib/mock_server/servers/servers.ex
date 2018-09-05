@@ -38,6 +38,20 @@ defmodule MockServer.Servers do
     |> RunningServer.access_path(method, path)
   end
 
+  def server_for_path(path_components) when is_list(path_components) do
+    servers_to_match =
+      Server
+      |> Query.with_path_starting_with(List.first(path_components))
+      |> Repo.all()
+
+    Enum.find(servers_to_match, fn %{path: path} ->
+      server_path_components = String.split(path, "/", trim: true)
+      last_component_index = length(server_path_components) - 1
+      Enum.slice(path_components, 0..last_component_index) == server_path_components
+    end)
+    # List.first(servers_to_match)
+  end
+
   # Routing
   def extract_server_path(path) do
     case :binary.match(path, "/", scope: {1, String.length(path) - 1}) do

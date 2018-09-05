@@ -22,8 +22,13 @@ defmodule MockServerWeb.ServerController do
     render(conn, "servers.json", %{servers: servers})
   end
 
+  # NOTE we may need to support server with route = /server/path
+  #      instead of jus /server
   def access(conn, params) do
-    {server, path} = Servers.extract_server_path(params["path"])
-    Servers.access_path(server, conn.method, path)
+    [server | subpaths] = params["path"]
+    # {server, path} = Servers.extract_server_path(params["path"])
+    # Servers.server_for_path(params["path"])
+    subpath = Enum.join(subpaths, "/")
+    Servers.access_path("/#{server}", conn.method, "/#{subpaths}")
   end
 end
