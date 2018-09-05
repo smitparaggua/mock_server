@@ -40,7 +40,9 @@ defmodule MockServer.Servers do
 
   # Routing
   def extract_server_path(path) do
-    :binary.match()
-    {path, "/"}
+    case :binary.match(path, "/", scope: {1, String.length(path) - 1}) do
+      {index, _} -> String.split_at(path, index)
+      :nomatch -> {path, "/"}
+    end
   end
 end
