@@ -104,7 +104,7 @@ defmodule MockServer.ServersTest do
   describe "server_for_path" do
     test "returns the server when match exists" do
       {:ok, server} = Servers.create(%{name: "Server", path: "/server"})
-      assert Servers.server_for_path(["server"]) == server
+      assert Servers.server_for_path(["server"]) == {server, []}
     end
 
     test "returns nil when no match exists" do
@@ -114,13 +114,13 @@ defmodule MockServer.ServersTest do
     test "matches the first server based on creation" do
       {:ok, matched} = Servers.create(%{name: "Server", path: "/server"})
       Servers.create(%{name: "Server", path: "/server/2"})
-      assert Servers.server_for_path(["server", "2"]) == matched
+      assert Servers.server_for_path(["server", "2"]) == {matched, ["2"]}
     end
 
     test "supports matching nested path" do
       Servers.create(%{name: "Server 1", path: "/server/1"})
       {:ok, matched} = Servers.create(%{name: "Server 2", path: "/server/2"})
-      assert Servers.server_for_path(["server", "2", "subpath"]) == matched
+      assert Servers.server_for_path(["server", "2", "subpath"]) == {matched, ["subpath"]}
     end
   end
 end

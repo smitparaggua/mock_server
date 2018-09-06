@@ -33,6 +33,7 @@ defmodule MockServer.Servers do
   end
 
   def access_path(server, method, path) do
+    path = "/#{Enum.join(path, "/")}"
     server.id
     |> RunningRegistry.pid_of()
     |> RunningServer.access_path(method, path)
@@ -44,12 +45,14 @@ defmodule MockServer.Servers do
       |> Query.with_path_starting_with(List.first(path_components))
       |> Repo.all()
 
-    Enum.find(servers_to_match, fn %{path: path} ->
+    Enum.find_value(servers_to_match, fn %{path: path} = server ->
       server_path_components = String.split(path, "/", trim: true)
       last_component_index = length(server_path_components) - 1
-      Enum.slice(path_components, 0..last_component_index) == server_path_components
+      path_components_to_match = Enum.slice(path_components, 0..last_component_index)
+      if path_components_to_match == server_path_components do
+        {server, path_components -- server_path_components}
+      end
     end)
-    # List.first(servers_to_match)
   end
 
   # Routing
