@@ -9,6 +9,10 @@ const Servers = {
 
   get(id) {
     return axios.get(`/api/servers/${id}`)
+  },
+
+  start(id) {
+    return axios.post(`/api/servers/${id}/start`)
   }
 }
 

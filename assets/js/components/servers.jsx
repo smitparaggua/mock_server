@@ -1,13 +1,14 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import axios from "axios"
-import {ButtonLink} from "./button"
+import {ButtonLink, Button} from "./button"
+import styled from "styled-components"
 
-const headerStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center"
-}
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
 
 class Servers extends React.PureComponent {
   constructor(props) {
@@ -30,10 +31,10 @@ class Servers extends React.PureComponent {
   render() {
     return (
       <div className="container">
-        <div style={headerStyle}>
+        <Header>
           <h2 style={{display: "inline-block"}}>Servers</h2>
           <ButtonLink to="/servers/new" icon="plus">Create Server</ButtonLink>
-        </div>
+        </Header>
 
         {this.state.loading
           ? "Loading"
@@ -45,31 +46,79 @@ class Servers extends React.PureComponent {
 }
 
 const ServerListing = ({servers}) => {
-  const style = {
-    listStyleType: "none"
-  }
+  const Listing = styled.div`
+    list-style-type: none;
+  `
+  const ListItem = styled.li`
+    margin-bottom: 1em;
+  `
   return (
-    <ul style={style}>
-      {servers.map(server => {
-        return <Server key={server.id} server={server}/>
-      })}
-    </ul>
+    <Listing>
+      {servers.map(server => (
+        <ListItem key={server.id}>
+          <Server server={server}/>
+        </ListItem>
+      ))}
+    </Listing>
   )
 }
 
-const Server = ({server}) => {
-  const style = {
-    marginBottom: "1em"
+const ServerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 2em;
+`
+
+const StartButton = styled(Button)`
+  background-color: #5fb760;
+  border-color: #50ad51;
+  color: white;
+`
+
+const StopButton = styled(Button)`
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d43f3a;
+`
+
+const Subtext = styled.div`
+  font-size: small;
+  color: gray;
+`
+
+class Server extends React.PureComponent {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      state: 'stopped',
+      server: props.server
+    }
   }
-  return (
-    <li style={style}>
-      <Link to={`/servers/${server.id}`}>{server.name}</Link>
-      <div style={{fontSize: "smaller", color: "gray"}}>
-        <code>{server.path}</code>
-        <div>{server.description}</div>
-      </div>
-    </li>
-  )
+
+  handleStart() {
+    // call start
+    // while calling, change button to running
+    // on fail go back to start
+    // on success go to stop
+  }
+
+  render() {
+    const server = this.props.server
+    return (
+      <ServerContainer>
+        <div>
+          <Link to={`/servers/${server.id}`}>{server.name}</Link>
+          <Subtext>
+            <code>{server.path}</code>
+            <div>{server.description}</div>
+          </Subtext>
+        </div>
+        <StartButton>Start</StartButton>
+      </ServerContainer>
+    )
+  }
 }
 
 export default Servers

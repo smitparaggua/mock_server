@@ -24,6 +24,16 @@ defmodule MockServerWeb.ServerController do
 
   def access(conn, params) do
     {server, subpath} = Servers.server_for_path(params["path"])
-    Servers.access_path(server, conn.method, subpath)
+    route = Servers.access_path(server, conn.method, subpath)
+    conn
+    |> put_resp_content_type(route.response_type)
+    |> send_resp(route.status_code, route.response_body)
+  end
+
+  def start(conn, %{"server_id" => server_id}) do
+    case Servers.get(server_id) do
+      nil -> send_resp(conn, 404, "")
+      server -> render(conn, "server.json", d(%{server}))
+    end
   end
 end

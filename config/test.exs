@@ -11,6 +11,8 @@ config :mock_server, MockServer.Repo,
   pool_size: 10,
   database: "mock_server_test"
 
+config :mock_server, initialize_server_processes: false
+
 # Print only warnings and errors during test
 config :logger, level: :warn
 

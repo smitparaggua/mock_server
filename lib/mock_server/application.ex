@@ -6,16 +6,23 @@ defmodule MockServer.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    # Define workers and child supervisors to be supervised
-    children = [
-      supervisor(MockServerWeb.Endpoint, []),
-      supervisor(MockServer.Repo, []),
-      worker(MockServer.Servers.RunningRegistry, []),
-      supervisor(
-        DynamicSupervisor, [[strategy: :one_for_one]],
-        name: MockServer.Servers.RunningServerSupervisor
-      )
-    ]
+    children =
+      if Application.get_env(:mock_server, :initialize_server_processes) do
+        [
+          supervisor(MockServerWeb.Endpoint, []),
+          supervisor(MockServer.Repo, []),
+          worker(MockServer.Servers.RunningRegistry, []),
+          supervisor(
+            DynamicSupervisor, [[strategy: :one_for_one]],
+            name: MockServer.Servers.RunningServerSupervisor
+          )
+        ]
+      else
+        [
+          supervisor(MockServerWeb.Endpoint, []),
+          supervisor(MockServer.Repo, [])
+        ]
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

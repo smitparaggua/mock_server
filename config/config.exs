@@ -13,7 +13,9 @@ config :mock_server, MockServerWeb.Endpoint,
   pubsub: [name: MockServer.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
-config :mock_server, ecto_repos: [MockServer.Repo]
+config :mock_server,
+  ecto_repos: [MockServer.Repo],
+  initialize_server_processes: true
 
 # Configures Elixir's Logger
 config :logger, :console,
