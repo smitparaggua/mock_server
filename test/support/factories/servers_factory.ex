@@ -3,15 +3,9 @@ defmodule MockServer.TestSupport.ServersFactory do
   alias MockServer.Servers.Server
   alias MockServer.Servers
 
-  @default_route_attrs %{
-    name: "Sample Server",
-    path: "/server/sample",
-    description: "A Sample Server"
-  }
-
   def create(custom_attributes \\ %{}) do
     {:ok, server} =
-      @default_route_attrs
+      generate_default()
       |> Map.merge(custom_attributes)
       |> Servers.create()
 
@@ -19,7 +13,15 @@ defmodule MockServer.TestSupport.ServersFactory do
   end
 
   def build(custom_attributes \\ %{}) do
-    attributes = Map.merge(@default_route_attrs, custom_attributes)
+    attributes = Map.merge(generate_default(), custom_attributes)
     struct(Server, attributes)
+  end
+
+  defp generate_default() do
+    %{
+      name: ExRandomString.generate(),
+      path: "/#{ExRandomString.generate()}",
+      description: "A Sample Server"
+    }
   end
 end

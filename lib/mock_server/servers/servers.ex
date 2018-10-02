@@ -1,4 +1,6 @@
 defmodule MockServer.Servers do
+  @type server :: pid | atom
+
   alias MockServer.Repo
   alias MockServer.Servers.{
     Server, Query, Route, RunningServer, RunningServerSupervisor,
@@ -23,6 +25,7 @@ defmodule MockServer.Servers do
     Repo.all(Route)
   end
 
+  @spec run(server) :: :ok
   def run(server) do
     server = Repo.preload(server, :routes)
     {:ok, pid} = DynamicSupervisor.start_child(
@@ -32,6 +35,13 @@ defmodule MockServer.Servers do
     RunningRegistry.register(server.id, pid)
   end
 
+  @spec stop(server) :: {:ok, server | nil}
+  def stop(server) do
+    stopped = if RunningRegistry.delete(server.id), do: server, else: nil
+    {:ok, stopped}
+  end
+
+  @spec access_path(server, String.t, String.t) :: Route.t
   def access_path(server, method, path) do
     path = "/#{Enum.join(path, "/")}"
     server.id
@@ -49,7 +59,7 @@ defmodule MockServer.Servers do
       server_path_components = String.split(path, "/", trim: true)
       last_component_index = length(server_path_components) - 1
       path_components_to_match = Enum.slice(path_components, 0..last_component_index)
-      if path_components_to_match == server_path_components do
+      if path_components_to_match == server_path_components && RunningRegistry.running?(server.id) do
         {server, path_components -- server_path_components}
       end
     end)

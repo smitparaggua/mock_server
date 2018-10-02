@@ -9,8 +9,14 @@ defmodule MockServer.Servers.RunningRegistry do
     Agent.start_link(fn -> %{} end, [name: __MODULE__] ++ opts)
   end
 
+  @spec register(String.t, pid) :: :ok
   def register(key, pid) do
     Agent.update(__MODULE__, fn state -> Map.put(state, key, pid) end)
+  end
+
+  @spec running?(String.t) :: boolean
+  def running?(key) do
+    !!pid_of(key)
   end
 
   def pid_of(key) do
@@ -18,6 +24,8 @@ defmodule MockServer.Servers.RunningRegistry do
   end
 
   def delete(key) do
-    Agent.update(__MODULE__, fn state -> Map.delete(state, key) end)
+    Agent.get_and_update(__MODULE__, fn state ->
+      {Map.get(state, key), Map.delete(state, key)}
+    end)
   end
 end

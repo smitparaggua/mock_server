@@ -56,18 +56,20 @@ defmodule MockServerWeb.ServerControllerTest.RunningServer do
     end
 
     test "returns configured response of the server", d%{conn} do
-      response = get(conn, access_server_path(conn, :access, ["server", "path"]))
-      assert response.status == 200
-      assert response.resp_body == ~s({"hello": "world"})
+      conn = get(conn, access_server_path(conn, :access, ["server", "path"]))
+      assert conn.status == 200
+      assert conn.resp_body == ~s({"hello": "world"})
+      assert get_resp_header(conn, "content-type") == ["application/json; charset=utf-8"]
+    end
 
-      content_type = Enum.find_value(response.resp_headers, fn header ->
-        case header do
-          {"content-type", value} -> value
-          _ -> false
-        end
-      end)
+    test "returns server not found when server path does not exist", d%{conn} do
+      conn = get(conn, access_server_path(conn, :access, ["not-server", "path"]))
+      assert conn.status == 404
+      assert conn.resp_body == "Server not found"
+      assert get_resp_header(conn, "content-type") == ["text/plain; charset=utf-8"]
+    end
 
-      assert content_type == "application/json; charset=utf-8"
+    test "returns error when server accessed is not running" do
     end
   end
 end

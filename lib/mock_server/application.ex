@@ -1,33 +1,49 @@
 defmodule MockServer.Application do
   use Application
 
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   def start(_type, _args) do
-    import Supervisor.Spec
-
     children =
       if Application.get_env(:mock_server, :initialize_server_processes) do
-        [
-          supervisor(MockServerWeb.Endpoint, []),
-          supervisor(MockServer.Repo, []),
-          worker(MockServer.Servers.RunningRegistry, []),
-          supervisor(
-            DynamicSupervisor, [[strategy: :one_for_one]],
-            name: MockServer.Servers.RunningServerSupervisor
-          )
-        ]
+        Enum.concat(base_processes(), server_processes())
       else
-        [
-          supervisor(MockServerWeb.Endpoint, []),
-          supervisor(MockServer.Repo, [])
-        ]
+        base_processes()
       end
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: MockServer.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  defp base_processes do
+    [
+      %{
+        id: MockServerWeb.Endpoint,
+        start: {MockServerWeb.Endpoint, :start_link, []},
+        type: :supervisor
+      },
+
+      %{
+        id: MockServer.Repo,
+        start: {MockServer.Repo, :start_link, []},
+        type: :supervisor
+      }
+    ]
+  end
+
+  defp server_processes do
+    [
+      %{
+        id: DynamicSupervisor,
+        start: {
+          DynamicSupervisor, :start_link, [
+            strategy: :one_for_one,
+            name: MockServer.Servers.RunningServerSupervisor
+          ]
+        },
+        type: :supervisor
+      },
+
+      {MockServer.Servers.RunningRegistry, []}
+    ]
   end
 
   # Tell Phoenix to update the endpoint configuration

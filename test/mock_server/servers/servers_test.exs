@@ -102,6 +102,8 @@ defmodule MockServer.ServersTest do
   end
 
   describe "server_for_path" do
+    # TODO now that this test require RunningRegistry, it's no longer parallelizable
+
     test "returns the server when match exists" do
       {:ok, server} = Servers.create(%{name: "Server", path: "/server"})
       assert Servers.server_for_path(["server"]) == {server, []}

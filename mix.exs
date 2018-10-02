@@ -35,7 +35,6 @@ defmodule MockServer.Mixfile do
       {:phoenix, "~> 1.3.0"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:destructure, "~> 0.2.3"},
       {:cowboy, "~> 1.0"},
@@ -43,7 +42,11 @@ defmodule MockServer.Mixfile do
       {:ecto, "~> 2.2"},
       {:postgrex, "~> 0.13"},
       {:key_convert, "~> 0.3.0"},
-      {:httpoison, "~> 1.2"}
+      {:httpoison, "~> 1.2"},
+      {:ex_random_string, "~> 1.0.1"},
+
+      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:dialyxir, "~> 1.0.0-rc.3", only: [:dev], runtime: false}
     ]
   end
 end

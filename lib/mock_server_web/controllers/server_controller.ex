@@ -23,11 +23,18 @@ defmodule MockServerWeb.ServerController do
   end
 
   def access(conn, params) do
-    {server, subpath} = Servers.server_for_path(params["path"])
-    route = Servers.access_path(server, conn.method, subpath)
-    conn
-    |> put_resp_content_type(route.response_type)
-    |> send_resp(route.status_code, route.response_body)
+    case Servers.server_for_path(params["path"]) do
+      {server, subpath} ->
+        route = Servers.access_path(server, conn.method, subpath)
+        conn
+        |> put_resp_content_type(route.response_type)
+        |> send_resp(route.status_code, route.response_body)
+
+      nil ->
+        conn
+        |> put_resp_content_type("text/plain")
+        |> send_resp(404, "Server not found")
+    end
   end
 
   def start(conn, %{"server_id" => server_id}) do
