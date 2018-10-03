@@ -1,15 +1,12 @@
 defmodule MockServer.RunningServerTest do
   use MockServer.DataCase
   alias MockServer.Servers
-  alias Servers.{RunningServerSupervisor, RunningRegistry}
+
+  @moduletag :run_server_processes
 
   # NOTE: This test might be too complicated (a bit like integration test)
   # we might need to move this away from unit tests
   setup do
-    start_supervised!(RunningRegistry)
-    start_supervised!(
-      {DynamicSupervisor, name: RunningServerSupervisor, strategy: :one_for_one}
-    )
     {:ok, server} = Servers.create(%{name: "Server 1", path: "/server"})
     {:ok, %{server: server}}
   end

@@ -2,17 +2,10 @@ defmodule MockServerWeb.ServerControllerTest.RunningServer do
   use MockServerWeb.ConnCase
   import Destructure
   alias MockServer.Servers
-  alias MockServer.Servers.{RunningServerSupervisor, RunningRegistry}
+
+  @moduletag :run_server_processes
 
   describe "start" do
-    setup do
-      start_supervised!(RunningRegistry)
-      start_supervised!(
-        {DynamicSupervisor, name: RunningServerSupervisor, strategy: :one_for_one}
-      )
-      :ok
-    end
-
     test "returns not found when server does not exist", d%{conn} do
       non_existing_id = "51f41bf1-0b6e-4375-b5e7-4f6546f63212"
       response = post(conn, server_start_path(conn, :start, non_existing_id))
@@ -36,11 +29,6 @@ defmodule MockServerWeb.ServerControllerTest.RunningServer do
 
   describe "access" do
     setup do
-      start_supervised!(RunningRegistry)
-      start_supervised!(
-        {DynamicSupervisor, name: RunningServerSupervisor, strategy: :one_for_one}
-      )
-
       route_attrs = %{
         method: "GET",
         path: "/path",

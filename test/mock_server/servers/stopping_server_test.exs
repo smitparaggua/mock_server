@@ -1,19 +1,14 @@
 defmodule MockServer.Servers.StoppingServerTest do
   use MockServer.DataCase
 
+  @moduletag :run_server_processes
+
   import Destructure
 
   alias MockServer.TestSupport.ServersFactory
-  alias MockServer.Servers.{RunningRegistry, RunningServerSupervisor}
   alias MockServer.Servers
 
   setup do
-    # TODO find a way to extract this out. Too much replication
-    start_supervised!(RunningRegistry)
-    start_supervised!(
-      {DynamicSupervisor, name: RunningServerSupervisor, strategy: :one_for_one}
-    )
-
     server = ServersFactory.create()
     {:ok, d%{server}}
   end

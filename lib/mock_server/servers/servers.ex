@@ -59,7 +59,8 @@ defmodule MockServer.Servers do
       server_path_components = String.split(path, "/", trim: true)
       last_component_index = length(server_path_components) - 1
       path_components_to_match = Enum.slice(path_components, 0..last_component_index)
-      if path_components_to_match == server_path_components && RunningRegistry.running?(server.id) do
+      paths_match? = path_components_to_match == server_path_components
+      if paths_match? && RunningRegistry.running?(server.id) do
         {server, path_components -- server_path_components}
       end
     end)

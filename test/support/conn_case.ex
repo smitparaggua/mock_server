@@ -15,6 +15,8 @@ defmodule MockServerWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias MockServer.TestSetup
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -29,6 +31,7 @@ defmodule MockServerWeb.ConnCase do
 
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(MockServer.Repo)
+    if tags[:run_server_processes], do: TestSetup.run_server_processes()
 
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(MockServer.Repo, {:shared, self()})
