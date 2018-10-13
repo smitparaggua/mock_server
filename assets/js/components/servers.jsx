@@ -3,6 +3,7 @@ import {Link} from "react-router-dom"
 import axios from "axios"
 import {ButtonLink, Button} from "./button"
 import styled from "styled-components"
+import Server from "./server"
 
 const Header = styled.div`
   display: flex;
@@ -61,64 +62,6 @@ const ServerListing = ({servers}) => {
       ))}
     </Listing>
   )
-}
-
-const ServerContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 2em;
-`
-
-const StartButton = styled(Button)`
-  background-color: #5fb760;
-  border-color: #50ad51;
-  color: white;
-`
-
-const StopButton = styled(Button)`
-  color: #fff;
-  background-color: #d9534f;
-  border-color: #d43f3a;
-`
-
-const Subtext = styled.div`
-  font-size: small;
-  color: gray;
-`
-
-class Server extends React.PureComponent {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      state: 'stopped',
-      server: props.server
-    }
-  }
-
-  handleStart() {
-    // call start
-    // while calling, change button to running
-    // on fail go back to start
-    // on success go to stop
-  }
-
-  render() {
-    const server = this.props.server
-    return (
-      <ServerContainer>
-        <div>
-          <Link to={`/servers/${server.id}`}>{server.name}</Link>
-          <Subtext>
-            <code>{server.path}</code>
-            <div>{server.description}</div>
-          </Subtext>
-        </div>
-        <StartButton>Start</StartButton>
-      </ServerContainer>
-    )
-  }
 }
 
 export default Servers

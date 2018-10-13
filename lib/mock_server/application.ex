@@ -34,10 +34,10 @@ defmodule MockServer.Application do
       %{
         id: DynamicSupervisor,
         start: {
-          DynamicSupervisor, :start_link, [
+          DynamicSupervisor, :start_link, [[
             strategy: :one_for_one,
             name: MockServer.Servers.RunningServerSupervisor
-          ]
+          ]]
         },
         type: :supervisor
       },

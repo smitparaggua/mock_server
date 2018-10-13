@@ -4,8 +4,6 @@ defmodule MockServer.ServersTest.PathMatcherTest do
 
   @moduletag :run_server_processes
 
-  # TODO now that this test require RunningRegistry, it's no longer parallelizable
-
   test "returns the server when match exists" do
     {:ok, server} = Servers.create(%{name: "Server", path: "/server"})
     Servers.run(server)
