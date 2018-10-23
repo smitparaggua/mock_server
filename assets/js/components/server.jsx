@@ -28,6 +28,7 @@ export default class Server extends React.PureComponent {
   handleStart() {
     this.setState({state: 'starting'})
     Servers.start(this.state.server.id)
+      .then(console.log)
       .then(() => this.setState({state: 'running'}))
       .catch(() => this.setState({state: 'stopped'}))
     // call start

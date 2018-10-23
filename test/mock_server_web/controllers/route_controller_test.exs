@@ -2,11 +2,11 @@ defmodule MockServerWeb.RouteControllerTest do
   use MockServerWeb.ConnCase, async: true
   import Destructure
 
-  alias MockServer.TestSupport.ServersFactory
+  alias MockServer.TestSupport.ServerFactory
 
   describe "create" do
     setup d%{conn} do
-      server = ServersFactory.create()
+      server = ServerFactory.create()
       create_route = &post(conn, server_route_path(conn, :create, server.id), &1)
       {:ok, d%{server, conn, create_route}}
     end
@@ -55,7 +55,7 @@ defmodule MockServerWeb.RouteControllerTest do
   end
 
   test "list routes returns all the server's routes", d%{conn} do
-    server = ServersFactory.create()
+    server = ServerFactory.create()
     routes =
       [route_params(%{path: "/route-1"}), route_params(%{path: "/route-2"})]
       |> Enum.map(&KeyConvert.stringify/1)

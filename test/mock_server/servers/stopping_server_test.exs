@@ -5,11 +5,11 @@ defmodule MockServer.Servers.StoppingServerTest do
 
   import Destructure
 
-  alias MockServer.TestSupport.ServersFactory
+  alias MockServer.TestSupport.ServerFactory
   alias MockServer.Servers
 
   setup do
-    server = ServersFactory.create()
+    server = ServerFactory.create()
     {:ok, d%{server}}
   end
 

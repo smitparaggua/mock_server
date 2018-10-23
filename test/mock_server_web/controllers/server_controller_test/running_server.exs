@@ -2,6 +2,7 @@ defmodule MockServerWeb.ServerControllerTest.RunningServer do
   use MockServerWeb.ConnCase
   import Destructure
   alias MockServer.Servers
+  alias MockServer.TestSupport.ServerFactory
 
   @moduletag :run_server_processes
 
@@ -24,6 +25,22 @@ defmodule MockServerWeb.ServerControllerTest.RunningServer do
       assert response.status == 200
       response = post(conn, server_start_path(conn, :start, server.id))
       assert response.status == 200
+    end
+
+    test "makes server accessible", d%{conn} do
+      route_params = %{
+        method: "GET",
+        path: "/hello",
+        status_code: "200",
+        response_type: "text/plain",
+        response_body: "hello, world"
+      }
+
+      server = ServerFactory.create_with_route(%{}, route_params)
+      post(conn, server_start_path(conn, :start, server.id))
+      response = get(conn, "/access#{server.path}/hello")
+      assert response.status == 200
+      assert response.resp_body == "hello, world"
     end
   end
 
