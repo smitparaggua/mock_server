@@ -43,14 +43,6 @@ defmodule MockServer.ServersTest do
     end
   end
 
-  describe "list" do
-    test "returns all servers starting from most recently created" do
-      {:ok, first} = Servers.create(%{name: "First Server", path: "/first"})
-      {:ok, second} = Servers.create(%{name: "Second Server", path: "/second"})
-      assert Servers.list() == [second, first]
-    end
-  end
-
   describe "add_route" do
     test "returns new route" do
       attrs = route_attrs()

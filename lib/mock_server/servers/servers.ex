@@ -14,7 +14,20 @@ defmodule MockServer.Servers do
 
   def get(server_id), do: Repo.get(Server, server_id)
 
-  def list(), do: Repo.all(Server |> Query.from_recently_created())
+  def list() do
+    Server
+    |> Query.from_recently_created()
+    |> Repo.all()
+    |> add_running_information()
+  end
+
+  defp add_running_information(servers) when is_list(servers) do
+    Enum.map(servers, &add_running_information/1)
+  end
+
+  defp add_running_information(server) do
+    Map.put(server, :running?, RunningRegistry.running?(server.id))
+  end
 
   def add_route(server_id, route_params) do
     Route.changeset(%Route{server_id: server_id}, route_params)

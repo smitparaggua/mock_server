@@ -8,6 +8,7 @@ defmodule MockServer.Servers.Server do
     field :name, :string
     field :path, :string
     field :description, :string
+    field :running?, :boolean, virtual: true
     timestamps()
 
     has_many :routes, MockServer.Servers.Route

@@ -20,24 +20,28 @@ export default class Server extends React.PureComponent {
 
   constructor(props) {
     super(props)
-    this.state = {state: 'stopped', server: props.server}
-    this.handleStart = this.handleStart.bind(this)
-    this.handleStop = this.handleStop.bind(this)
+    const server = props.server
+    const initialState = server.isRunning ? 'running' : 'stopped'
+    this.state = {state: initialState, server: props.server}
+    this.startServer = this.startServer.bind(this)
+    this.stopServer = this.stopServer.bind(this)
+    this.toggleServer = this.toggleServer.bind(this)
   }
 
-  handleStart() {
+  toggleServer() {
+    this.state.state == 'stopped' ? this.startServer() : this.stopServer()
+  }
+
+  startServer() {
     this.setState({state: 'starting'})
     Servers.start(this.state.server.id)
       .then(console.log)
       .then(() => this.setState({state: 'running'}))
+      .then(() => console.log(this.state))
       .catch(() => this.setState({state: 'stopped'}))
-    // call start
-    // while calling, change button to running
-    // on fail go back to start
-    // on success go to stop
   }
 
-  handleStop() {
+  stopServer() {
     this.setState({state: 'stopping'})
     Servers.stop(this.state.server.id)
       .then(() => this.setState({state: 'stopped'}))
@@ -55,7 +59,7 @@ export default class Server extends React.PureComponent {
           </Subtext>
         </div>
 
-        <RunServerButton state={this.state.state} onClick={() => this.handleStart()}>
+        <RunServerButton state={this.state.state} onClick={() => this.toggleServer()}>
           Start
         </RunServerButton>
       </ServerContainer>

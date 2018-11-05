@@ -11,6 +11,10 @@ defmodule MockServer.TestSupport.ServerFactory do
     |> Repo.insert!()
   end
 
+  def create_list(count) do
+    Enum.map(1..count, fn _x -> create() end)
+  end
+
   def create_with_route(custom_attributes \\ %{}, route_attributes \\ %{}) do
     server = create(custom_attributes)
     route_attributes

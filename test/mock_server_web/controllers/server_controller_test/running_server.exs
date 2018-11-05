@@ -1,6 +1,5 @@
 defmodule MockServerWeb.ServerControllerTest.RunningServer do
   use MockServerWeb.ConnCase
-  import Destructure
   alias MockServer.Servers
   alias MockServer.TestSupport.ServerFactory
 

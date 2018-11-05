@@ -32,6 +32,7 @@ defmodule MockServerWeb.Router do
     resources "/servers", ServerController, only: [:create, :show, :index] do
       resources "/routes", RouteController, only: [:create, :index]
       post "/start", ServerController, :start, as: :start
+      post "/stop", ServerController, :stop, as: :stop
     end
   end
 

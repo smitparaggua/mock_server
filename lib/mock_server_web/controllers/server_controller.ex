@@ -45,4 +45,13 @@ defmodule MockServerWeb.ServerController do
         render(conn, "server.json", d(%{server}))
     end
   end
+
+  def stop(conn, %{"server_id" => server_id}) do
+    case Servers.get(server_id) do
+      nil -> send_resp(conn, 404, "")
+      server ->
+        Servers.stop(server)
+        render(conn, "server.json", d%{server})
+    end
+  end
 end

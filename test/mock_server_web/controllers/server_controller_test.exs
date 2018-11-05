@@ -1,7 +1,6 @@
 defmodule MockServerWeb.ServerControllerTest do
   use MockServerWeb.ConnCase, async: true
   import Destructure
-  alias MockServer.Assertions
 
   @valid_server_attributes %{
     name: "Server 1",
@@ -44,23 +43,6 @@ defmodule MockServerWeb.ServerControllerTest do
       non_existing_id = "51f41bf1-0b6e-4375-b5e7-4f6546f63212"
       response = get(conn, server_path(conn, :show, non_existing_id))
       assert response.status == 404
-    end
-  end
-
-  describe "index" do
-    test "returns list of servers", d(%{conn}) do
-      servers = [
-        create_server(conn, %{name: "A Server", path: "/server/a"}),
-        create_server(conn, %{name: "B Server", path: "/server/b"}),
-        create_server(conn, %{name: "C Server", path: "/server/c"})
-      ]
-
-      body =
-        conn
-        |> get(server_path(conn, :index))
-        |> json_response(200)
-
-      assert Assertions.matches_members?(body["data"], servers)
     end
   end
 

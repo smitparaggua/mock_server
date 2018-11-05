@@ -13,6 +13,10 @@ const Servers = {
 
   start(id) {
     return axios.post(`/api/servers/${id}/start`)
+  },
+
+  stop(id) {
+    return axios.post(`/api/servers/${id}/stop`)
   }
 }
 

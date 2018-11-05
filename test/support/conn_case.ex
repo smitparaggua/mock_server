@@ -22,6 +22,7 @@ defmodule MockServerWeb.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import MockServerWeb.Router.Helpers
+      import Destructure
 
       # The default endpoint for testing
       @endpoint MockServerWeb.Endpoint
