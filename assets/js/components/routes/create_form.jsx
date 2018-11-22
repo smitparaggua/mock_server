@@ -7,32 +7,14 @@ import {get} from "utils/object_utils"
 import styled from "styled-components"
 import {Dropdown} from "components/dropdown"
 import Button from "components/button"
+import {Form, Error, FormGroup} from "components/forms"
 
-const Form = styled.div`
-  div {
-    width: 100%;
-  }
-`
-
-const MethodDropdown = styled(Dropdown)`
+export const MethodDropdown = styled(Dropdown)`
   max-width: 7em;
 `
 
-const ResponseTypeDropdown = styled(Dropdown)`
+export const ResponseTypeDropdown = styled(Dropdown)`
   max-width: 20em;
-`
-
-const Error = styled.div`
-  color: red;
-`
-
-const FormGroup = styled.div`
-  margin: 20px 0;
-  width: 100%;
-
-  textarea {
-    width: 100%;
-  }
 `
 
 const httpMethods = [
@@ -97,36 +79,30 @@ export default class CreateRouteForm extends React.PureComponent {
     return (
       <div>
         <form onSubmit={this.onSubmit}>
-          <FormGroup>
+          <FormGroup errors={{Method: errors.method, Path: errors.path}}>
             <GroupedInput>
               <MethodDropdown choices={httpMethods} onChange={this.handleChangeOf("method")}/>
               <Input icon="code" type="text" name="path" icon="code"
                 placeholder="URL" onChange={this.handleChange}/>
             </GroupedInput>
-            <Error>{errors.method}</Error>
-            <Error>{errors.path}</Error>
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup errors={{"Response Type": errors.responseType, "Status Code": errors.statusCode}}>
             <GroupedInput>
               <ResponseTypeDropdown choices={responseTypes}
                 onChange={this.handleChangeOf("responseType")}/>
               <Input type="text" name="statusCode"
                 placeholder="Status Code" onChange={this.handleChange}/>
             </GroupedInput>
-            <Error>{errors.responseType}</Error>
-            <Error>{errors.statusCode}</Error>
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup errors={{"Response Body": errors.responseBody}}>
             <TextArea name="responseBody" placeholder="Response Body" onChange={this.handleChange}/>
-            <Error>{errors.responseBody}</Error>
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup errors={{Description: errors.description}}>
             <TextArea name="description" placeholder="Description"
               onChange={this.handleChange}/>
-            <Error>{errors.description}</Error>
           </FormGroup>
 
           <FormGroup>
