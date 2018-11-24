@@ -22,6 +22,22 @@ defmodule MockServerWeb.ServerControllerTest do
         "description" => "Test Server"
       } = body
     end
+
+    test "invalid params returns error", d%{conn} do
+      body =
+        conn
+        |> post(server_path(conn, :create), %{})
+        |> json_response(400)
+
+      assert body == %{
+        "code" => "0001",
+        "message" => "Invalid Parameters",
+        "details" => %{
+          "name" => ["can't be blank"],
+          "path" => ["can't be blank"]
+        }
+      }
+    end
   end
 
   describe "get" do

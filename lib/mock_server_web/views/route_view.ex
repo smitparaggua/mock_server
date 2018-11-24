@@ -7,9 +7,9 @@ defmodule MockServerWeb.RouteView do
     server_id response_body
   )a
 
-  def render("route.json", d%{route}) do
+  (def render("route.json", d%{route}) do
     Map.take(route, @route_attributes)
-  end
+  end)
 
   def render("route.json", d%{changeset}) do
     details = Enum.reduce(changeset.errors, %{}, fn ({key, {msg, _opts}}, acc) ->

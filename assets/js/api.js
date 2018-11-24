@@ -3,8 +3,11 @@ import {camelizeKeys, decamelizeKeys} from "humps"
 import {get} from "utils/object_utils"
 
 const Servers = {
-  create({name, path, description}) {
-    return axios.post("/api/servers", {name, path, description})
+  create(params) {
+    params = decamelizeKeys(params)
+    return axios.post(`/api/servers`, params)
+      .catch(error => Promise.reject(camelizeKeys(get(error, "response.data"))))
+      .then(response => camelizeKeys(response.data))
   },
 
   get(id) {

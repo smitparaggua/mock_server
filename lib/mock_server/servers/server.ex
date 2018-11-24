@@ -17,6 +17,7 @@ defmodule MockServer.Servers.Server do
   def changeset(%__MODULE__{} = server, params) do
     server
     |> cast(params, ~w(name path description)a)
+    |> validate_required(~w(name path)a)
     |> unique_constraint(:path)
     |> unique_constraint(:name)
   end

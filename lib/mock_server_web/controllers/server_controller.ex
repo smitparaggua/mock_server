@@ -4,16 +4,23 @@ defmodule MockServerWeb.ServerController do
   import Destructure
 
   def create(conn, params) do
-    {:ok, server} = Servers.create(params)
-    conn
-    |> put_status(:created)
-    |> render("server.json", d(%{server}))
+    case Servers.create(params) do
+      {:ok, server} ->
+        conn
+        |> put_status(:created)
+        |> render("server.json", server)
+
+      {:error, changeset} ->
+        conn
+        |> put_status(:bad_request)
+        |> render("server.json", changeset)
+    end
   end
 
   def show(conn, %{"id" => id}) do
     case Servers.get(id) do
       nil -> send_resp(conn, 404, "")
-      server -> render(conn, "server.json", d(%{server}))
+      server -> render(conn, "server.json", server)
     end
   end
 

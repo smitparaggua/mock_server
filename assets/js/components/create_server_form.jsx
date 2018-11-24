@@ -3,14 +3,14 @@ import {Redirect} from "react-router-dom"
 import {servers_path} from "../remote_routes"
 import {Input} from "./input"
 import {TextArea} from "./text_area"
-import {Submit} from "./submit"
 import {Servers} from "../api"
 import {Form, Error, FormGroup} from "components/forms"
+import Button from "components/button"
 
 class CreateServerForm extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {name: '', path: '', description: '', created: false}
+    this.state = {name: '', path: '', description: '', errors: {}, created: false}
     this.handleChange = this.handleChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.generateForm = this.generateForm.bind(this)
@@ -23,9 +23,9 @@ class CreateServerForm extends React.PureComponent {
 
   onSubmit(event) {
     event.preventDefault()
-    Servers.create(this.state).then(() => {
-      this.setState({created: true})
-    })
+    Servers.create(this.state)
+      .then(() => this.setState({created: true}))
+      .catch(error => this.setState({errors: error.details}))
   }
 
   render() {
@@ -33,19 +33,28 @@ class CreateServerForm extends React.PureComponent {
   }
 
   generateForm() {
+    const errors = this.state.errors
     return (
       <form onSubmit={this.onSubmit}>
-        <Input type="text" name="name" icon="server" placeholder="Name"
-               onChange={this.handleChange} value={this.state.name}/>
+        <FormGroup errors={{Name: errors.name}}>
+          <Input type="text" name="name" icon="server" placeholder="Name"
+                 onChange={this.handleChange} value={this.state.name}/>
+        </FormGroup>
 
-        <Input type="text" name="path" icon="code" placeholder="Path"
-               onChange={this.handleChange} value={this.state.path}/>
+        <FormGroup errors={{Path: errors.path}}>
+          <Input type="text" name="path" icon="code" placeholder="Path"
+                 onChange={this.handleChange} value={this.state.path}/>
+        </FormGroup>
 
-        <TextArea name="description" placeholder="Description"
-                  style={{marginBottom: "15px"}} onChange={this.handleChange}
-                  value={this.state.value}/>
+        <FormGroup errors={{Description: errors.description}}>
+          <TextArea name="description" placeholder="Description"
+                    style={{marginBottom: "15px"}} onChange={this.handleChange}
+                    value={this.state.value}/>
+        </FormGroup>
 
-        <Submit/>
+        <FormGroup>
+          <Button>Submit</Button>
+        </FormGroup>
       </form>
     )
   }
