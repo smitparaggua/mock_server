@@ -26,7 +26,7 @@ defmodule MockServerWeb.ServerView do
 
   def render("servers.json", d(%{servers})) when is_list(servers) do
     %{
-      data: Enum.map(servers, &render("server.json", %{server: &1}))
+      data: Enum.map(servers, &render("server.json", &1))
     }
   end
 end

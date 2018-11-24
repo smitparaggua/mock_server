@@ -1,7 +1,6 @@
 defmodule MockServerWeb.ServerController do
   use MockServerWeb, :controller
   alias MockServer.Servers
-  import Destructure
 
   def create(conn, params) do
     case Servers.create(params) do
@@ -49,7 +48,7 @@ defmodule MockServerWeb.ServerController do
       nil -> send_resp(conn, 404, "")
       server ->
         Servers.run(server)
-        render(conn, "server.json", d(%{server}))
+        render(conn, "server.json", server)
     end
   end
 
@@ -58,7 +57,7 @@ defmodule MockServerWeb.ServerController do
       nil -> send_resp(conn, 404, "")
       server ->
         Servers.stop(server)
-        render(conn, "server.json", d%{server})
+        render(conn, "server.json", server)
     end
   end
 end

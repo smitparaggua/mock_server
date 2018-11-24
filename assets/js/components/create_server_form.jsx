@@ -48,8 +48,7 @@ class CreateServerForm extends React.PureComponent {
 
         <FormGroup errors={{Description: errors.description}}>
           <TextArea name="description" placeholder="Description"
-                    style={{marginBottom: "15px"}} onChange={this.handleChange}
-                    value={this.state.value}/>
+                    onChange={this.handleChange} value={this.state.value}/>
         </FormGroup>
 
         <FormGroup>
