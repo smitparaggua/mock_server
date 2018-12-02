@@ -1,7 +1,7 @@
 import React from "react"
-import {Servers, Routes} from "api"
-import NotFound from "./errors/not_found"
-import {ButtonLink} from "./button"
+import {Servers, Routes} from "js/api"
+import NotFound from "errors/not_found"
+import {ButtonLink} from "components/button"
 
 const headerStyle = {
   display: "flex",

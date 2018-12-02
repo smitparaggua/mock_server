@@ -27,7 +27,7 @@ export const Input = (props) => {
     : <BaseInput {...otherProps}/>
 }
 
-const InputGroup = ({icon, ...otherProps, className}) => {
+const InputGroup = ({icon, className, ...otherProps}) => {
   const containerStyle = {
     position: "relative"
   }

@@ -1,7 +1,7 @@
 import React from "react"
 import {Link} from "react-router-dom"
 import styled from "styled-components"
-import {Servers} from "api"
+import {Servers} from "js/api"
 import RunServerButton from "./run_server_button"
 import {confirmAlert} from "react-confirm-alert"
 import "react-confirm-alert/src/react-confirm-alert.css"

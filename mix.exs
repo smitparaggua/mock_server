@@ -32,15 +32,18 @@ defmodule MockServer.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.0"},
+      {:phoenix, "~> 1.4.0"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_html, "~> 2.10"},
       {:gettext, "~> 0.11"},
       {:destructure, "~> 0.2.3"},
-      {:cowboy, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:plug, "~> 1.7"},
       {:uuid, "~> 1.1.8"},
-      {:ecto, "~> 2.2"},
-      {:postgrex, "~> 0.13"},
+      {:ecto_sql, "~> 3.0"},
+      {:phoenix_ecto, "~> 4.0"},
+      {:postgrex, "~> 0.14.1"},
+      {:jason, "~> 1.0"},
       {:key_convert, "~> 0.3.0"},
       {:httpoison, "~> 1.2"},
       {:ex_random_string, "~> 1.0.1"},

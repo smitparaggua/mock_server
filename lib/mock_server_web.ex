@@ -21,8 +21,8 @@ defmodule MockServerWeb do
     quote do
       use Phoenix.Controller, namespace: MockServerWeb
       import Plug.Conn
-      import MockServerWeb.Router.Helpers
       import MockServerWeb.Gettext
+      alias MockServerWeb.Router.Helpers, as: Routes
     end
   end
 
