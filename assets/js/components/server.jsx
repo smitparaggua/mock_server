@@ -66,27 +66,29 @@ export default class Server extends React.PureComponent {
       .then(() => this.setState({state: 'stopped'}))
   }
 
-  deleteServer(id) {
+  deleteServer(server) {
     const options = {
-      title: 'Title',
-      message: 'Message',
+      title: 'Delete Server',
+      message: `Are you sure you want to delete ${server.name}?`,
       buttons: [
         {
           label: 'Yes',
-          onClick: () => alert('Click Yes')
+          onClick: () => {
+            return Servers.delete(server.id)
+              .then(() => alert('success'))
+              .catch(() => alert('failed'))
+            // TODO after delete handler
+            // on success, show deleted message toast, refresh list of servers
+            // on fail, show failed toast
+          }
         },
-        {
-          label: 'No',
-          onClick: () => alert('Click No')
-        }
+        {label: 'No'}
       ],
       childrenElement: () => <div />,
-      customUI: ({ title, message, onClose }) => <div>Custom UI</div>,
+      // customUI: ({ title, message, onClose }) => <div>Custom UI</div>,
       willUnmount: () => {}
     };
     confirmAlert(options);
-    // show dialogue
-    // send delete request
   }
 
   render() {
@@ -106,7 +108,7 @@ export default class Server extends React.PureComponent {
             Start
           </RunServerButton>
           <DeleteButton className={`fa fa-times-circle`}
-                        onClick={() => this.deleteServer(server.id)}>
+                        onClick={() => this.deleteServer(server)}>
           </DeleteButton>
         </MenuItems>
       </ServerContainer>

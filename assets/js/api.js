@@ -1,13 +1,9 @@
 import axios from "axios"
-import {camelizeKeys, decamelizeKeys} from "humps"
-import {get} from "utils/object_utils"
+import request from "utils/request"
 
 const Servers = {
   create(params) {
-    params = decamelizeKeys(params)
-    return axios.post(`/api/servers`, params)
-      .catch(error => Promise.reject(camelizeKeys(get(error, "response.data"))))
-      .then(response => camelizeKeys(response.data))
+    return request.post('api/servers', params)
   },
 
   get(id) {
@@ -20,6 +16,10 @@ const Servers = {
 
   stop(id) {
     return axios.post(`/api/servers/${id}/stop`)
+  },
+
+  delete(id) {
+    return request.delete(`/api/servers/${id}`)
   }
 }
 
@@ -30,10 +30,7 @@ const Routes = {
   },
 
   create(serverId, params) {
-    params = decamelizeKeys(params)
-    return axios.post(`/api/servers/${serverId}/routes`, params)
-      .catch(error => Promise.reject(camelizeKeys(get(error, "response.data"))))
-      .then(response => camelizeKeys(response.data))
+    return request.post(`/api/servers/${serverId}/routes`, params)
   }
 }
 
