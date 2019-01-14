@@ -45,6 +45,8 @@ export default class Server extends React.PureComponent {
     this.stopServer = this.stopServer.bind(this)
     this.toggleServer = this.toggleServer.bind(this)
     this.deleteServer = this.deleteServer.bind(this)
+    this.onDeleteSuccess = props.onDeleteSuccess || noop
+    this.onDeleteFail = props.onDeleteFail || noop
   }
 
   toggleServer() {
@@ -75,8 +77,8 @@ export default class Server extends React.PureComponent {
           label: 'Yes',
           onClick: () => {
             return Servers.delete(server.id)
-              .then(() => alert('success'))
-              .catch(() => alert('failed'))
+              .then(this.onDeleteSuccess)
+              .catch(this.onDeleteFail)
             // TODO after delete handler
             // on success, show deleted message toast, refresh list of servers
             // on fail, show failed toast
@@ -86,7 +88,7 @@ export default class Server extends React.PureComponent {
       ],
       childrenElement: () => <div />,
       // customUI: ({ title, message, onClose }) => <div>Custom UI</div>,
-      willUnmount: () => {}
+      willUnmount: noop
     };
     confirmAlert(options);
   }
@@ -115,3 +117,5 @@ export default class Server extends React.PureComponent {
     )
   }
 }
+
+function noop() {}

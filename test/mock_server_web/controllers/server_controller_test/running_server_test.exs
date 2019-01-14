@@ -1,4 +1,4 @@
-defmodule MockServerWeb.ServerControllerTest.RunningServer do
+defmodule MockServerWeb.ServerControllerTest.RunningServerTest do
   use MockServerWeb.ConnCase
   alias MockServer.Servers
   alias MockServer.TestSupport.ServerFactory
@@ -74,6 +74,38 @@ defmodule MockServerWeb.ServerControllerTest.RunningServer do
     end
 
     test "returns error when server accessed is not running" do
+    end
+  end
+
+  describe "deleting a server" do
+    setup do
+      server = ServerFactory.create()
+      {:ok, d%{server}}
+    end
+
+    test "deletes the server if server exists", d%{conn, server} do
+      delete(conn, server_path(conn, :delete, server.id))
+      response = get(conn, server_path(conn, :show, server.id))
+      assert response.status == 404
+    end
+
+    test "returns not found when server does not exist", d%{conn} do
+      fake_id = "f83dc132-f8b7-415f-b8c9-da59c7fe50cd"
+      body =
+        conn
+        |> delete(server_path(conn, :delete, fake_id))
+        |> json_response(404)
+
+      assert body == %{"code" => "0002", "message" => "Server not found"}
+    end
+
+    test "returns the deleted server", d%{conn, server} do
+      body =
+        conn
+        |> delete(server_path(conn, :delete, server.id))
+        |> json_response(200)
+
+      assert body["id"] == server.id
     end
   end
 end

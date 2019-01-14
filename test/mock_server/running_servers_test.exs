@@ -22,10 +22,12 @@ defmodule MockServer.RunningServerTest do
 
     Servers.add_route(server.id, route_attrs)
     Servers.run(server)
-    assert Servers.access_path(server, "GET", ["hello"]) == %{
+    expected_response = %{
       status_code: 200,
       response_type: "application/json",
       response_body: ~S({"hello": "world"})
     }
+
+    assert Servers.access_path(server, "GET", ["hello"]) == {:ok, expected_response}
   end
 end

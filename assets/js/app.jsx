@@ -20,6 +20,7 @@
 // import socket from "./socket"
 import "babel-polyfill"
 import "../css/phoenix.css"
+import "../css/app.css"
 
 import React from "react"
 import ReactDom from "react-dom"

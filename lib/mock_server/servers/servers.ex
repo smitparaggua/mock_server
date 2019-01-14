@@ -1,6 +1,4 @@
 defmodule MockServer.Servers do
-  @type server :: pid | atom
-
   alias MockServer.Repo
   alias MockServer.Servers.{
     Server, Query, Route, RunningServer, RunningServerSupervisor,
@@ -12,7 +10,13 @@ defmodule MockServer.Servers do
     |> Repo.insert()
   end
 
-  def get(server_id), do: Repo.get(Server, server_id)
+  @spec get(String.t) :: Server.t | nil
+  def get(server_id) do
+    case UUID.info(server_id) do
+      {:ok, _} -> Repo.get(Server, server_id)
+      _ -> nil
+    end
+  end
 
   def list() do
     Server
@@ -34,11 +38,14 @@ defmodule MockServer.Servers do
     |> Repo.insert()
   end
 
-  def list_routes(_server_id) do
-    Repo.all(Route)
+  @spec list_routes(String.t) :: [Server.t]
+  def list_routes(server_id) do
+    Route
+    |> Query.with_server_id(server_id)
+    |> Repo.all()
   end
 
-  @spec run(server) :: :ok
+  @spec run(Server.t) :: :ok
   def run(server) do
     server = Repo.preload(server, :routes)
     {:ok, pid} = DynamicSupervisor.start_child(
@@ -48,19 +55,27 @@ defmodule MockServer.Servers do
     RunningRegistry.register(server.id, pid)
   end
 
-  @spec stop(server) :: {:ok, server | nil}
+  @spec stop(Server.t) :: {:ok, Server.t | nil}
   def stop(server) do
     stopped = if RunningRegistry.delete(server.id), do: server, else: nil
     {:ok, stopped}
   end
 
-  @spec access_path(server, String.t, String.t) :: Route.t
-  def access_path(server, method, path) do
+  @spec access_path(Server.t, String.t, [String.t] | String.t) :: {:ok, Route.t} | :not_found
+
+  def access_path(server, method, path) when is_list(path) do
     path = "/#{Enum.join(path, "/")}"
-    server.id
-    |> RunningRegistry.pid_of()
-    |> RunningServer.access_path(method, path)
+    access_path(server, method, path)
   end
+
+  def access_path(server, method, path) do
+    case RunningRegistry.pid_of(server.id) do
+      nil -> :not_found
+      pid -> {:ok, RunningServer.access_path(pid, method, path)}
+    end
+  end
+
+  @spec server_for_path([String.t] | String.t) :: Server.t
 
   def server_for_path(path_components) when is_list(path_components) do
     servers_to_match =
@@ -79,11 +94,27 @@ defmodule MockServer.Servers do
     end)
   end
 
+  def server_for_path(path) do
+    path
+    |> String.split("/", trim: true)
+    |> server_for_path()
+  end
+
   # Routing
   def extract_server_path(path) do
     case :binary.match(path, "/", scope: {1, String.length(path) - 1}) do
       {index, _} -> String.split_at(path, index)
       :nomatch -> {path, "/"}
+    end
+  end
+
+  @spec delete(String.t) :: {:ok, Server.t} | :not_found
+  def delete(server_id) do
+    case get(server_id) do
+      nil -> :not_found
+      server ->
+        stop(server)
+        Repo.delete(server)
     end
   end
 end

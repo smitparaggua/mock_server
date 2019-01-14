@@ -31,7 +31,7 @@ defmodule MockServerWeb.ServerController do
   def access(conn, params) do
     case Servers.server_for_path(params["path"]) do
       {server, subpath} ->
-        route = Servers.access_path(server, conn.method, subpath)
+        {:ok, route} = Servers.access_path(server, conn.method, subpath)
         conn
         |> put_resp_content_type(route.response_type)
         |> send_resp(route.status_code, route.response_body)
@@ -57,6 +57,18 @@ defmodule MockServerWeb.ServerController do
       nil -> send_resp(conn, 404, "")
       server ->
         Servers.stop(server)
+        render(conn, "server.json", server)
+    end
+  end
+
+  def delete(conn, %{"id" => server_id}) do
+    case Servers.delete(server_id) do
+      :not_found ->
+        conn
+        |> put_status(:not_found)
+        |> render("server_not_found.json")
+
+      {:ok, server} ->
         render(conn, "server.json", server)
     end
   end

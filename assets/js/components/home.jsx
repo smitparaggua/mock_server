@@ -1,8 +1,20 @@
 import React from "react"
+import styled from "styled-components"
+
+// TODO delete these
+import Button from "components/button"
+import Notifications from "components/notifications/index"
 
 const Home = () => {
+  let notifRef = React.createRef()
   return (
     <div className="container">
+      <Notifications ref={notifRef}/>
+
+      <Button onClick={() => notifRef.current.display({message: 'hahoh'})}>
+        Add Shit
+      </Button>
+
       <header className="header">
         <nav role="navigation">
           <ul className="nav nav-pills pull-right">

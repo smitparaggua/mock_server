@@ -18,10 +18,18 @@ class Servers extends React.PureComponent {
       servers: [],
       loading: true
     }
+    this._refreshServers = this._refreshServers.bind(this)
   }
 
   componentDidMount() {
+    this._refreshServers()
+  }
+
+  _refreshServers() {
+    // TODO error handling
+    console.log('loading servers')
     axios.get("/api/servers").then(({data}) => {
+      console.log(data.data)
       this.setState({
         loading: false,
         servers: data.data
@@ -39,14 +47,17 @@ class Servers extends React.PureComponent {
 
         {this.state.loading
           ? "Loading"
-          : <ServerListing servers={this.state.servers}/>
+          : <ServerListing
+              servers={this.state.servers}
+              onDeleteSuccess={this._refreshServers}
+              onDeleteFail={() => alert('delet failed')}/>
         }
       </div>
     )
   }
 }
 
-const ServerListing = ({servers}) => {
+const ServerListing = ({servers, onDeleteSuccess, onDeleteFail}) => {
   const Listing = styled.div`
     list-style-type: none;
   `
@@ -57,7 +68,7 @@ const ServerListing = ({servers}) => {
     <Listing>
       {servers.map(server => (
         <ListItem key={server.id}>
-          <Server server={server}/>
+          <Server server={server} onDeleteSuccess={onDeleteSuccess} onDeleteFail={onDeleteFail}/>
         </ListItem>
       ))}
     </Listing>

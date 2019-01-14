@@ -1,6 +1,7 @@
 defmodule MockServer.ServersTest do
   use MockServer.DataCase, async: true
   alias MockServer.Servers
+  alias MockServer.TestSupport.ServerFactory
 
   @valid_server_attributes %{
     name: "Server 1",
@@ -41,6 +42,10 @@ defmodule MockServer.ServersTest do
       assert {:ok, server} = Servers.create(@valid_server_attributes)
       assert Servers.get(server.id) == server
     end
+
+    test "returns nil when retrieving with non-uuid string" do
+      assert Servers.get("not-uuid") == nil
+    end
   end
 
   describe "add_route" do
@@ -66,6 +71,12 @@ defmodule MockServer.ServersTest do
       assert Enum.count(routes) == 2
       assert route_1 in routes
       assert route_2 in routes
+    end
+
+    test "does not include routes of other servers" do
+      server_1 = ServerFactory.create_with_route()
+      ServerFactory.create_with_route()
+      assert Servers.list_routes(server_1.id) == server_1.routes
     end
   end
 

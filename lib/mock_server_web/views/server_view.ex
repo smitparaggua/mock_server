@@ -29,4 +29,8 @@ defmodule MockServerWeb.ServerView do
       data: Enum.map(servers, &render("server.json", &1))
     }
   end
+
+  def render("server_not_found.json", _assigns) do
+    %{code: "0002", message: "Server not found"}
+  end
 end

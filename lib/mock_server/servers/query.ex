@@ -9,4 +9,8 @@ defmodule MockServer.Servers.Query do
     search = "/#{string}%"
     from v in queryable, where: like(v.path, ^search)
   end
+
+  def with_server_id(queryable, server_id) do
+    from v in queryable, where: v.server_id == ^server_id
+  end
 end

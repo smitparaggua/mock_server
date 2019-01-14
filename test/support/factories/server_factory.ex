@@ -1,4 +1,4 @@
-defmodule MockServer.TestSupport.ServerFactory do
+(defmodule MockServer.TestSupport.ServerFactory do
 
   alias MockServer.Servers.Server
   alias MockServer.TestSupport.RouteFactory
@@ -17,11 +17,12 @@ defmodule MockServer.TestSupport.ServerFactory do
 
   def create_with_route(custom_attributes \\ %{}, route_attributes \\ %{}) do
     server = create(custom_attributes)
-    route_attributes
-    |> Map.merge(%{server_id: server.id})
-    |> RouteFactory.create()
+    route =
+      route_attributes
+      |> Map.merge(%{server_id: server.id})
+      |> RouteFactory.create()
 
-    Map.merge(server, %{routes: [server]})
+    Map.merge(server, %{routes: [route]})
   end
 
   def build(custom_attributes \\ %{}) do
@@ -36,4 +37,4 @@ defmodule MockServer.TestSupport.ServerFactory do
       description: "A Sample Server"
     }
   end
-end
+end)

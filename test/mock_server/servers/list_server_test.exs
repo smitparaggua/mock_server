@@ -7,8 +7,9 @@ defmodule MockServer.ServersTest.ListTest do
 
   describe "list" do
     test "returns all servers starting from most recently created" do
-      first = Map.put(ServerFactory.create(), :running?, false);
-      second = Map.put(ServerFactory.create(), :running?, false);
+      first = Map.put(ServerFactory.create(), :running?, false)
+      :timer.sleep(1000)
+      second = Map.put(ServerFactory.create(), :running?, false)
       assert Servers.list() == [second, first]
     end
 

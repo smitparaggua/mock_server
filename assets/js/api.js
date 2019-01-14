@@ -3,7 +3,7 @@ import request from "utils/request"
 
 const Servers = {
   create(params) {
-    return request.post('api/servers', params)
+    return request.post('/api/servers', params)
   },
 
   get(id) {
