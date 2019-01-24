@@ -3,7 +3,8 @@ import {Link} from "react-router-dom"
 import axios from "axios"
 import {ButtonLink, Button} from "./button"
 import styled from "styled-components"
-import Server from "./server"
+import Notifications from "components/notifications/index"
+import ServerListing from "components/server_listing"
 
 const Header = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ const Header = styled.div`
   align-items: center;
 `
 
-class Servers extends React.PureComponent {
+export default class Servers extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -27,9 +28,7 @@ class Servers extends React.PureComponent {
 
   _refreshServers() {
     // TODO error handling
-    console.log('loading servers')
     axios.get("/api/servers").then(({data}) => {
-      console.log(data.data)
       this.setState({
         loading: false,
         servers: data.data
@@ -38,8 +37,11 @@ class Servers extends React.PureComponent {
   }
 
   render() {
+    const notifRef = React.createRef()
+    const self = this;
     return (
       <div className="container">
+        <Notifications ref={notifRef}/>
         <Header>
           <h2 style={{display: "inline-block"}}>Servers</h2>
           <ButtonLink to="/servers/new" icon="plus">Create Server</ButtonLink>
@@ -49,30 +51,22 @@ class Servers extends React.PureComponent {
           ? "Loading"
           : <ServerListing
               servers={this.state.servers}
-              onDeleteSuccess={this._refreshServers}
-              onDeleteFail={() => alert('delet failed')}/>
+              onDeleteSuccess={function (server) {
+                const message = (
+                  <span> Successfully deleted <strong>{server.name}</strong>. </span>
+                )
+                notifRef.current.display({message: message, type: 'success'})
+                self._refreshServers()
+              }}
+              onDeleteFail={function (error) {
+                console.log(error)
+                notifRef.current.display({
+                  message: `Failed to delete server`,
+                  type: 'error'
+                })
+              }}/>
         }
       </div>
     )
   }
 }
-
-const ServerListing = ({servers, onDeleteSuccess, onDeleteFail}) => {
-  const Listing = styled.div`
-    list-style-type: none;
-  `
-  const ListItem = styled.li`
-    margin-bottom: 1em;
-  `
-  return (
-    <Listing>
-      {servers.map(server => (
-        <ListItem key={server.id}>
-          <Server server={server} onDeleteSuccess={onDeleteSuccess} onDeleteFail={onDeleteFail}/>
-        </ListItem>
-      ))}
-    </Listing>
-  )
-}
-
-export default Servers

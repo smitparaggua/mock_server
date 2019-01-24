@@ -1,6 +1,8 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
+  background-color: #151b31;
+  color: #95a0bd;
 }
 
 @media(min-width: 576px) {
@@ -33,4 +35,15 @@ body {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+}
+
+a {
+  color: #2aa2ef;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+a:hover {
+  color: #2aa2ef;
+  text-decoration: underline;
 }

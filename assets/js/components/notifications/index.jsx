@@ -1,25 +1,24 @@
 import React from "react"
 import styled from "styled-components"
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import { TransitionGroup, CSSTransition } from "react-transition-group"
 import Fade from "components/transitions/fade"
+import {SuccessAlert} from "components/notifications/alerts"
 
 const DEFAULT_DISPLAY_DELAY = 3000
 
 class Notifications extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      notifs: []
-    }
-    this.display = this.display.bind(this)
+    this.state = {notifs: []}
   }
 
   display(notif) {
     const delay = notif.delay || DEFAULT_DISPLAY_DELAY
     const notifId = Math.random().toString(36)
-    notif = {id: notifId, ...notif}
+    const timeout = setTimeout(this._removeNotif.bind(this, notifId), delay)
+    notif = {id: notifId, timeout, ...notif}
     this.setState({notifs: [notif, ...this.state.notifs]});
-    setTimeout(this._removeNotif.bind(this, notifId), delay)
+    // TODO clear the timeouts on componentWillUnmount
   }
 
   _removeNotif(notifId) {
@@ -28,12 +27,18 @@ class Notifications extends React.PureComponent {
     })
   }
 
+  componentWillUnmount() {
+    this.state.notifs.forEach(function (notif) {
+      clearTimeout(notif.timeout);
+    });
+  }
+
   render() {
     return (
       <TransitionGroup>
         {this.state.notifs.map(notif => (
           <Fade key={notif.id}>
-            <div>{notif.message}</div>
+            <SuccessAlert>{notif.message}</SuccessAlert>
           </Fade>
         ))}
       </TransitionGroup>

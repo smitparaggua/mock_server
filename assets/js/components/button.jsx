@@ -4,15 +4,18 @@ import {Link, withRouter} from "react-router-dom"
 import styled from "styled-components"
 
 const Button = styled.button`
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: inset 0 1px 1px rgb(0, 0, 0, 0.075);
-  padding: 6px 12px;
-  line-height: 1.42;
-  font-size: 1em;
-  box-sizing: border-box;
+  background-color: #3f4453;
+  color: #fff;
+  margin: 0;
+  border: none;
+  border-width: 2px;
+  border-radius: 0.1875rem;
   cursor: pointer;
-  outline: none;
+  padding: 0.7rem 1rem;
+  line-height: 1.35em;
+  white-space: normal;
+  font-size: 0.8571em;
+  font-weight: 400;
 `
 
 const ButtonLink = withRouter(({children, to, icon, history}) => {
