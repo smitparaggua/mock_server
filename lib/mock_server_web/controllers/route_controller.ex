@@ -22,4 +22,11 @@ defmodule MockServerWeb.RouteController do
     routes = Servers.list_routes(params["server_id"])
     render(conn, "routes.json", d%{routes})
   end
+
+  def show(conn, %{"id" => id}) do
+    case Servers.get_route(id) do
+      nil -> send_resp(conn, 404, "")
+      route -> render(conn, "route.json", d%{route})
+    end
+  end
 end

@@ -19,6 +19,6 @@ export default {
 
 function handleResponse(request) {
   return request
-    .catch(error => Promise.reject(camelizeKeys(get(error, "response.data"))))
+    .catch(error => Promise.reject(camelizeKeys(get(error, "response.data", error))))
     .then(response => camelizeKeys(response.data))
 }

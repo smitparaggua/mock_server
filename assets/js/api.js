@@ -31,12 +31,10 @@ const Routes = {
 
   create(serverId, params) {
     return request.post(`/api/servers/${serverId}/routes`, params)
-  }
-}
+  },
 
-function pick(keys) {
-  return {
-    ...(keys.reduce((mem, key) => ({ ...mem, [key]: obj[key] }), {}))
+  get(routeId) {
+    return request.get(`/api/routes/${routeId}`)
   }
 }
 

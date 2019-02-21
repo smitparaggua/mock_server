@@ -98,4 +98,34 @@ defmodule MockServerWeb.RouteControllerTest do
     |> is_nil()
     |> Kernel.not()
   end
+
+  describe "show" do
+    test "show routes return the route in question", d%{conn} do
+      route = %{
+        method: "GET",
+        path: "/test",
+        status_code: 200,
+        response_type: "text/plain",
+        response_body: "hello, world"
+      }
+
+      server = ServerFactory.create_with_route(%{}, route)
+      route = Enum.at(server.routes, 0)
+      body =
+        conn
+        |> get(route_path(conn, :show, route.id))
+        |> json_response(200)
+
+      assert body["method"] == "GET"
+      assert body["path"] == "/test"
+      assert body["status_code"] == 200
+      assert body["response_type"] == "text/plain"
+      assert body["response_body"] == "hello, world"
+    end
+
+    test "returns not found when ID does not exist", d%{conn} do
+      response = get(conn, route_path(conn, :show, "fake"))
+      assert response.status == 404
+    end
+  end
 end

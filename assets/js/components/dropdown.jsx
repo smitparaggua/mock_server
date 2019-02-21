@@ -8,12 +8,12 @@ const Icon = ({icon}) => (
 )
 
 const Selection = styled.ul`
-  border: 1px #ccc solid;
+  font-size: 0.9em;
   list-style: none;
   position: absolute;
   margin: 0;
   z-index: 2;
-  background-color: white;
+  background-color: #2f364d;
   border-radius: 0 0 5px 5px;
   padding: 0;
   display: none;
@@ -24,21 +24,21 @@ const Selection = styled.ul`
 `
 
 const SelectionItem = styled.li`
-  padding: 5px 20px;
+  padding: 0.75em 2em;
   cursor: pointer;
 
   &:hover {
-    background-color: #eee;
+    background-color: rgba(200, 208, 218, 0.3);
   }
 `
 
 const DropdownButton = styled(Button)`
-  background-color: #eee;
+  font-size: 0.9em;
   height: 100%;
   width: 100%;
 
   ${props => props.active && css`
-    background-color: #fff;
+    background-color: #555c70;
   `}
 `
 

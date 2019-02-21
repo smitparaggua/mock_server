@@ -34,6 +34,7 @@ defmodule MockServerWeb.Router do
       post "/start", ServerController, :start, as: :start
       post "/stop", ServerController, :stop, as: :stop
     end
+    resources "/routes", RouteController, only: [:show]
   end
 
   scope "/", MockServerWeb do

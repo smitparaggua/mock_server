@@ -22,7 +22,7 @@ defmodule MockServer.TestSupport.RouteFactory do
     %{
       method: "GET",
       path: "/#{ExRandomString.generate()}",
-      status_code: "200",
+      status_code: 200,
       response_type: "text/plain",
       response_body: "hello, world"
     }

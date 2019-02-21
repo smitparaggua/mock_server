@@ -6,11 +6,13 @@ import Servers from "components/servers"
 import ShowServer from "components/show_server"
 import CreateRoute from "routes/create"
 import NotFound from "errors/not_found"
+import ShowRoute from "components/show_route/index"
 
 const routes = (
   <Switch>
     <Route exact path="/" component={Home}/>
     <Route path="/servers/:serverId/routes/new" component={CreateRoute}/>
+    <Route path="/servers/:serverId/routes/:id" component={ShowRoute}/>
     <Route path="/servers/new" component={CreateServer}/>
     <Route path="/servers/:id" component={ShowServer}/>
     <Route path="/servers" component={Servers}/>

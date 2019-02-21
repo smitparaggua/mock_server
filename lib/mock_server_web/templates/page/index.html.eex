@@ -1,1 +1,3 @@
-<div id="react-app"></div>
+<div id="react-app">
+</div>
+<div class="lds-circle center"><div></div></div>

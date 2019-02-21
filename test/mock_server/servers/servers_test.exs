@@ -103,4 +103,21 @@ defmodule MockServer.ServersTest do
       assert result == {"/server", "/subpath/123"}
     end
   end
+
+  describe "get_route" do
+    test "returns route with the specified id" do
+      route =
+        ServerFactory.create_with_route()
+        |> Map.get(:routes)
+        |> Enum.at(0)
+
+      assert route == Servers.get_route(route.id)
+    end
+
+    test "returns nil for non existent id" do
+      fake_id = UUID.uuid4()
+      assert Servers.get_route(fake_id) == nil
+      assert Servers.get_route("not-uuid") == nil
+    end
+  end
 end

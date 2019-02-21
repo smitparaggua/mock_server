@@ -33,6 +33,14 @@ defmodule MockServer.Servers do
     Map.put(server, :running?, RunningRegistry.running?(server.id))
   end
 
+  @spec get_route(String.t) :: Route.t | nil
+  def get_route(route_id) do
+    case UUID.info(route_id) do
+      {:ok, _} -> Repo.get(Route, route_id)
+      _ -> nil
+    end
+  end
+
   def add_route(server_id, route_params) do
     Route.changeset(%Route{server_id: server_id}, route_params)
     |> Repo.insert()

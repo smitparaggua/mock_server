@@ -2,6 +2,7 @@ import React from "react"
 import {Servers, Routes} from "js/api"
 import NotFound from "errors/not_found"
 import {ButtonLink} from "components/button"
+import Route from "components/show_server/route"
 
 const headerStyle = {
   display: "flex",
@@ -65,12 +66,7 @@ class ShowServer extends React.PureComponent {
             : (
               <ul style={{listStyleType: "none"}}>
                 {this.state.routes.map(route => (
-                  <li style={{}} key={route.id}>
-                    <span>{route.method} {route.path}</span>
-                    <div style={{fontSize: "smaller", color: "gray"}}>
-                      <div>{route.description}</div>
-                    </div>
-                  </li>
+                  <Route key={route.id} route={route} server={this.state.server}/>
                 ))}
               </ul>
             )
