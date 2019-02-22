@@ -41,9 +41,18 @@ defmodule MockServer.Servers do
     end
   end
 
+  @spec add_route(String.t, Map.t) :: {:ok, Route.t} | {:error, Ecto.Changeset.t}
   def add_route(server_id, route_params) do
     Route.changeset(%Route{server_id: server_id}, route_params)
     |> Repo.insert()
+  end
+
+  @spec delete_route(String.t) :: {:ok, Route.t} | {:error, Ecto.Changeset.t} | :not_found
+  def delete_route(route_id) do
+    case get_route(route_id) do
+      nil -> :not_found
+      route -> Repo.delete(route)
+    end
   end
 
   @spec list_routes(String.t) :: [Server.t]

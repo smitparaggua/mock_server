@@ -1,6 +1,5 @@
 import React from "react"
 import {Redirect} from "react-router-dom"
-import {servers_path} from "../remote_routes"
 import {Input} from "./input"
 import {TextArea} from "./text_area"
 import {Servers} from "../api"

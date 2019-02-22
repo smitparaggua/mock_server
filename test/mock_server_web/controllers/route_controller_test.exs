@@ -128,4 +128,37 @@ defmodule MockServerWeb.RouteControllerTest do
       assert response.status == 404
     end
   end
+
+  describe "delete" do
+    setup do
+      route =
+        ServerFactory.create_with_route()
+        |> Map.get(:routes)
+        |> Enum.at(0)
+
+      {:ok, d%{route}}
+    end
+
+    test "delete route returns deleted route on success", d%{conn, route} do
+      body =
+        conn
+        |> delete(route_path(conn, :delete, route.id))
+        |> json_response(200)
+
+      assert body["id"] == route.id
+      assert body["method"] == route.method
+      assert body["path"] == route.path
+    end
+
+    test "deleted routes are no longer retrievable", d%{conn, route} do
+      delete(conn, route_path(conn, :delete, route.id))
+      response = get(conn, route_path(conn, :show, route.id))
+      assert response.status == 404
+    end
+
+    test "deleting non-existent routes return 404", d%{conn} do
+      response = delete(conn, route_path(conn, :delete, "non-existent-id"))
+      assert response.status == 404
+    end
+  end
 end

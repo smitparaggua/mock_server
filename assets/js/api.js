@@ -7,15 +7,15 @@ const Servers = {
   },
 
   get(id) {
-    return axios.get(`/api/servers/${id}`)
+    return request.get(`/api/servers/${id}`)
   },
 
   start(id) {
-    return axios.post(`/api/servers/${id}/start`)
+    return request.post(`/api/servers/${id}/start`)
   },
 
   stop(id) {
-    return axios.post(`/api/servers/${id}/stop`)
+    return request.post(`/api/servers/${id}/stop`)
   },
 
   delete(id) {
@@ -25,8 +25,7 @@ const Servers = {
 
 const Routes = {
   list(serverId) {
-    return axios.get(`/api/servers/${serverId}/routes`)
-      .then(response => response.data)
+    return request.get(`/api/servers/${serverId}/routes`)
   },
 
   create(serverId, params) {

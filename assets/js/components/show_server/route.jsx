@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import {ButtonLink} from "components/button"
 import {Link} from "react-router-dom"
+import {showRoutePath} from "local_routes"
 
 const RouteContainer = styled.li`
   margin: 0.5em;
@@ -13,10 +14,10 @@ const Description = styled.div`
 `
 
 export default function ({route, server}) {
-  const showRoutePath = `/servers/${server.id}/routes/${route.id}`
+  const path = showRoutePath(server.id, route.id)
   return (
     <RouteContainer>
-      <Link to={{pathname: showRoutePath, state: {route, server}}}>
+      <Link to={{pathname: path, state: {route, server}}}>
         {route.method} {route.path}
       </Link>
 

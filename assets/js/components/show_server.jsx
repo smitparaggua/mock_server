@@ -25,8 +25,8 @@ class ShowServer extends React.PureComponent {
 
   componentDidMount() {
     Servers.get(this.state.serverId)
-      .then((response) => this.setState({loading: false, server: response.data}))
-      .catch((error) => {
+      .then(server => this.setState({loading: false, server}))
+      .catch(error => {
         const response = error.response || {}
         return response.status == 404
           ? this.setState({loading: false})

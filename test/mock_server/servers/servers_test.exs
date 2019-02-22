@@ -1,5 +1,6 @@
 defmodule MockServer.ServersTest do
   use MockServer.DataCase, async: true
+  import Destructure
   alias MockServer.Servers
   alias MockServer.TestSupport.ServerFactory
 
@@ -90,6 +91,31 @@ defmodule MockServer.ServersTest do
     }
 
     Map.merge(default, custom)
+  end
+
+  describe "delete_route" do
+    setup do
+      route =
+        ServerFactory.create_with_route()
+        |> Map.get(:routes)
+        |> Enum.at(0)
+
+      {:ok, d%{route}}
+    end
+
+    test "delete_route returns deleted route", d%{route} do
+      {:ok, deleted} = Servers.delete_route(route.id)
+      assert deleted.id == route.id
+    end
+
+    test "delete_route make the route unretrievable", d%{route} do
+      Servers.delete_route(route.id)
+      assert Servers.get_route(route.id) == nil
+    end
+
+    test "delete_route returns :not_found when route does not exist" do
+      assert Servers.delete_route("fake-id") == :not_found
+    end
   end
 
   describe "extract_server_path" do

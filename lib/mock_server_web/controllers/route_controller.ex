@@ -29,4 +29,11 @@ defmodule MockServerWeb.RouteController do
       route -> render(conn, "route.json", d%{route})
     end
   end
+
+  def delete(conn, %{"id" => id}) do
+    case Servers.delete_route(id) do
+      :not_found -> send_resp(conn, 404, "")
+      {:ok, route} -> render(conn, "route.json", d%{route})
+    end
+  end
 end

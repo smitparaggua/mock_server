@@ -39,6 +39,7 @@ module.exports = (env, options) => ({
       js: path.resolve(__dirname, 'js'),
       components: path.resolve(__dirname, 'js/components'),
       remote_routes: path.resolve(__dirname, 'js/remote_routes'),
+      local_routes: path.resolve(__dirname, 'js/local_routes'),
       errors: path.resolve(__dirname, 'js/components/errors'),
       routes: path.resolve(__dirname, 'js/components/routes'),
       utils: path.resolve(__dirname, 'js/utils')
