@@ -1,25 +1,26 @@
 defmodule MockServerWeb.RouteView do
   use MockServerWeb, :view
   import Destructure
+  alias MockServerWeb.ErrorView
 
   @route_attributes ~w(
     id method path description status_code response_type
     server_id response_body
   )a
 
-  (def render("route.json", d%{route}) do
+  def render("route.json", d%{route}) do
     Map.take(route, @route_attributes)
-  end)
+  end
 
   def render("route.json", d%{changeset}) do
-    details = Enum.reduce(changeset.errors, %{}, fn ({key, {msg, _opts}}, acc) ->
-      Map.update(acc, key, [msg], &([msg] ++ &1))
-    end)
-
-    %{code: "0001", message: "Invalid Parameters", details: details}
+    ErrorView.render("invalid_params", d%{changeset})
   end
 
   def render("routes.json", d%{routes}) do
     Enum.map(routes, &render("route.json", %{route: &1}))
+  end
+
+  def render("route_not_found", _assigns) do
+    %{code: "RT002", message: ""}
   end
 end

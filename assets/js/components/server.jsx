@@ -6,11 +6,26 @@ import RunServerButton from "./run_server_button"
 import {confirmAlert} from "react-confirm-alert"
 import "react-confirm-alert/src/react-confirm-alert.css"
 
-const ServerContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 2em;
+const ServerContainer = styled.details`
+  transition: all 0.6s;
+
+	&[open] {
+		transition: all 0.6s;
+	}
+
+  summary {
+    cursor: pointer;
+
+    ::-webkit-details-marker {
+      display: none;
+    }
+
+    > div {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 `
 
 const Subtext = styled.div`
@@ -97,22 +112,30 @@ export default class Server extends React.PureComponent {
     const server = this.props.server
     return (
       <ServerContainer>
-        <div>
-          <Link to={`/servers/${server.id}`}>{server.name}</Link>
-          <Subtext>
-            <code>{server.path}</code>
-            <div>{server.description}</div>
-          </Subtext>
-        </div>
+        <summary>
+          <div>
+            <div>
+              <Link to={`/servers/${server.id}`}>{server.name}</Link>
+              <Subtext>
+                <code>{server.path}</code>
+                <div>{server.description}</div>
+              </Subtext>
+            </div>
 
-        <MenuItems>
-          <RunServerButton state={this.state.state} onClick={() => this.toggleServer()}>
-            Start
-          </RunServerButton>
-          <DeleteButton className={`fa fa-times-circle`}
-                        onClick={() => this.deleteServer(server)}>
-          </DeleteButton>
-        </MenuItems>
+            <MenuItems>
+              <RunServerButton state={this.state.state} onClick={() => this.toggleServer()}>
+                Start
+              </RunServerButton>
+              <DeleteButton className={`fa fa-times-circle`}
+                            onClick={() => this.deleteServer(server)}>
+              </DeleteButton>
+            </MenuItems>
+          </div>
+        </summary>
+        <p>Contents</p>
+        <p>Contents</p>
+        <p>Contents</p>
+        <p>Contents</p>
       </ServerContainer>
     )
   }

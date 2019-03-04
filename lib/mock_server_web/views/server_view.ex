@@ -4,6 +4,7 @@ defmodule MockServerWeb.ServerView do
 
   alias MockServer.Servers.Server
   alias Ecto.Changeset
+  alias MockServerWeb.ErrorView
 
   def render("server.json", %Server{} = server) do
     Map.take(server, ~w(id name path description)a)
@@ -17,11 +18,7 @@ defmodule MockServerWeb.ServerView do
   end
 
   def render("server.json", %Changeset{} = changeset) do
-    details = Enum.reduce(changeset.errors, %{}, fn ({key, {msg, _opts}}, acc) ->
-      Map.update(acc, key, [msg], &([msg] ++ &1))
-    end)
-
-    %{code: "0001", message: "Invalid Parameters", details: details}
+    ErrorView.render("invalid_params", d%{changeset})
   end
 
   def render("servers.json", d(%{servers})) when is_list(servers) do
@@ -31,6 +28,6 @@ defmodule MockServerWeb.ServerView do
   end
 
   def render("server_not_found.json", _assigns) do
-    %{code: "0002", message: "Server not found"}
+    %{code: "SRV002", message: "Server not found"}
   end
 end

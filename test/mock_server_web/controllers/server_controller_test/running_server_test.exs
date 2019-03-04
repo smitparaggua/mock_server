@@ -96,7 +96,7 @@ defmodule MockServerWeb.ServerControllerTest.RunningServerTest do
         |> delete(server_path(conn, :delete, fake_id))
         |> json_response(404)
 
-      assert body == %{"code" => "0002", "message" => "Server not found"}
+      assert body == %{"code" => "SRV002", "message" => "Server not found"}
     end
 
     test "returns the deleted server", d%{conn, server} do
