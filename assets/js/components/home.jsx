@@ -1,14 +1,22 @@
 import React from "react"
 import styled from "styled-components"
 
-// TODO delete these
 import Button from "components/button"
 import Notifications from "components/notifications/index"
+
+import ListAccordion from "components/list_accordion"
 
 const Home = () => {
   let notifRef = React.createRef()
   return (
     <div className="container">
+      <ListAccordion>
+        {{
+          header: "This is a summary",
+          items: []
+        }}
+      </ListAccordion>
+
       <Notifications ref={notifRef}/>
 
       <Button onClick={() => notifRef.current.display({message: 'hahoh'})}>

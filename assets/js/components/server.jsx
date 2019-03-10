@@ -7,14 +7,22 @@ import {confirmAlert} from "react-confirm-alert"
 import "react-confirm-alert/src/react-confirm-alert.css"
 
 const ServerContainer = styled.details`
-  transition: all 0.6s;
+  overflow: scroll;
+  transition: all 0.5s;
+  min-height: 4em;
+  max-height: 5em;
 
 	&[open] {
-		transition: all 0.6s;
+    min-height: 10em;
+    max-height: 40em;
 	}
 
   summary {
+    outline: none;
     cursor: pointer;
+    background-color: #2e364f;
+    padding: 0.8em;
+    border-radius: 0.3em;
 
     ::-webkit-details-marker {
       display: none;
