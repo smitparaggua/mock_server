@@ -1,5 +1,4 @@
-(defmodule MockServer.TestSupport.ServerFactory do
-
+defmodule MockServer.TestSupport.ServerFactory do
   alias MockServer.Servers.Server
   alias MockServer.TestSupport.RouteFactory
   alias MockServer.Repo
@@ -37,4 +36,4 @@
       description: "A Sample Server"
     }
   end
-end)
+end

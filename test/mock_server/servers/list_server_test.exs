@@ -1,7 +1,7 @@
 defmodule MockServer.ServersTest.ListTest do
   use MockServer.DataCase
   alias MockServer.Servers
-  alias MockServer.TestSupport.ServerFactory
+  alias MockServer.TestSupport.{ServerFactory, RouteFactory}
 
   @moduletag :run_server_processes
 
@@ -17,6 +17,13 @@ defmodule MockServer.ServersTest.ListTest do
       server = ServerFactory.create()
       Servers.run(server)
       assert Servers.list() == [Map.put(server, :running?, true)]
+    end
+
+    test "allows retrieval of routes" do
+      server = ServerFactory.create()
+      route = RouteFactory.create(%{path: "/test", server_id: server.id})
+      servers = Servers.list(with_routes: true)
+      assert Enum.at(servers, 0).routes == [route]
     end
   end
 end

@@ -13,4 +13,8 @@ defmodule MockServer.Servers.Query do
   def with_server_id(queryable, server_id) do
     from v in queryable, where: v.server_id == ^server_id
   end
+
+  def with_routes(queryable) do
+    from v in queryable, preload: [:routes]
+  end
 end

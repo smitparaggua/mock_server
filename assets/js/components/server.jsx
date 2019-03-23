@@ -5,35 +5,21 @@ import {Servers} from "js/api"
 import RunServerButton from "./run_server_button"
 import {confirmAlert} from "react-confirm-alert"
 import "react-confirm-alert/src/react-confirm-alert.css"
+import ListAccordion from "components/list_accordion"
 
-const ServerContainer = styled.details`
-  overflow: scroll;
-  transition: all 0.5s;
-  min-height: 4em;
-  max-height: 5em;
+const ServerContainer = styled.div`
+  outline: none;
+  cursor: pointer;
+  background-color: #2e364f;
+  border-radius: 0.3em;
 
-	&[open] {
-    min-height: 10em;
-    max-height: 40em;
-	}
-
-  summary {
-    outline: none;
-    cursor: pointer;
-    background-color: #2e364f;
-    padding: 0.8em;
-    border-radius: 0.3em;
-
-    ::-webkit-details-marker {
-      display: none;
-    }
-
-    > div {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-    }
+  ::-webkit-details-marker {
+    display: none;
   }
+
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 `
 
 const Subtext = styled.div`
@@ -118,33 +104,33 @@ export default class Server extends React.PureComponent {
 
   render() {
     const server = this.props.server
+    console.log(server)
     return (
-      <ServerContainer>
-        <summary>
-          <div>
-            <div>
-              <Link to={`/servers/${server.id}`}>{server.name}</Link>
-              <Subtext>
-                <code>{server.path}</code>
-                <div>{server.description}</div>
-              </Subtext>
-            </div>
+      <ListAccordion>
+        {{
+          header: (
+            <ServerContainer>
+              <div>
+                <Link to={`/servers/${server.id}`}>{server.name}</Link>
+                <Subtext>
+                  <code>{server.path}</code>
+                  <div>{server.description}</div>
+                </Subtext>
+              </div>
 
-            <MenuItems>
-              <RunServerButton state={this.state.state} onClick={() => this.toggleServer()}>
-                Start
-              </RunServerButton>
-              <DeleteButton className={`fa fa-times-circle`}
-                            onClick={() => this.deleteServer(server)}>
-              </DeleteButton>
-            </MenuItems>
-          </div>
-        </summary>
-        <p>Contents</p>
-        <p>Contents</p>
-        <p>Contents</p>
-        <p>Contents</p>
-      </ServerContainer>
+              <MenuItems>
+                <RunServerButton state={this.state.state} onClick={() => this.toggleServer()}>
+                  Start
+                </RunServerButton>
+                <DeleteButton className={`fa fa-times-circle`}
+                              onClick={() => this.deleteServer(server)}>
+                </DeleteButton>
+              </MenuItems>
+            </ServerContainer>
+          ),
+          items: []
+        }}
+      </ListAccordion>
     )
   }
 }

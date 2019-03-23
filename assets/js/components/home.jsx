@@ -13,7 +13,7 @@ const Home = () => {
       <ListAccordion>
         {{
           header: "This is a summary",
-          items: []
+          items: ["test", "haha", "hihi"]
         }}
       </ListAccordion>
 

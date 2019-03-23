@@ -5,6 +5,7 @@ import {ButtonLink, Button} from "./button"
 import styled from "styled-components"
 import Notifications from "components/notifications/index"
 import ServerListing from "components/server_listing"
+import {Servers as ServersApi} from "js/api"
 
 const Header = styled.div`
   display: flex;
@@ -28,10 +29,10 @@ export default class Servers extends React.PureComponent {
 
   _refreshServers() {
     // TODO error handling
-    axios.get("/api/servers").then(({data}) => {
+    return ServersApi.list({withRoutes: true}).then(servers => {
       this.setState({
         loading: false,
-        servers: data.data
+        servers: servers.data
       })
     })
   }

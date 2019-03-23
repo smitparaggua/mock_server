@@ -18,11 +18,22 @@ defmodule MockServer.Servers do
     end
   end
 
-  def list() do
-    Server
-    |> Query.from_recently_created()
+  def list(options \\ []) do
+    options
+    |> list_query()
     |> Repo.all()
     |> add_running_information()
+  end
+
+  defp list_query(options) do
+    case options[:with_routes] do
+      true ->
+        Server
+        |> Query.from_recently_created()
+        |> Query.with_routes()
+
+      _ -> Query.from_recently_created(Server)
+    end
   end
 
   defp add_running_information(servers) when is_list(servers) do

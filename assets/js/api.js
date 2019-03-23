@@ -1,9 +1,13 @@
 import axios from "axios"
 import request from "utils/request"
 
-const Servers = {
+export const Servers = {
   create(params) {
-    return request.post('/api/servers', params)
+    return request.post("/api/servers", params)
+  },
+
+  list({withRoutes}) {
+    return request.get(`api/servers?with_routes=${Boolean(withRoutes)}`)
   },
 
   get(id) {
@@ -23,7 +27,7 @@ const Servers = {
   }
 }
 
-const Routes = {
+export const Routes = {
   list(serverId) {
     return request.get(`/api/servers/${serverId}/routes`)
   },
@@ -37,4 +41,3 @@ const Routes = {
   }
 }
 
-export {Servers, Routes}

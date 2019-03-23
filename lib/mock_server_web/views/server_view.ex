@@ -4,17 +4,24 @@ defmodule MockServerWeb.ServerView do
 
   alias MockServer.Servers.Server
   alias Ecto.Changeset
-  alias MockServerWeb.ErrorView
+  alias MockServerWeb.{ErrorView, RouteView}
 
   def render("server.json", %Server{} = server) do
-    Map.take(server, ~w(id name path description)a)
-    %{
+    base = %{
       id: server.id,
       name: server.name,
       path: server.path,
       description: server.description,
       isRunning: server.running?
     }
+
+    case Ecto.assoc_loaded?(server.routes) do
+      true ->
+        routes = RouteView.render("routes.json", d%{routes: server.routes})
+        Map.put(base, :routes, routes)
+
+      _ -> base
+    end
   end
 
   def render("server.json", %Changeset{} = changeset) do
