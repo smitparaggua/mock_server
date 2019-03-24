@@ -32,8 +32,6 @@ const Details = styled.details`
 `
 
 export const ItemsContainer = styled.div`
-  text-align: center;
-  font-style: italic;
   border: 1px solid #242a3d;
   border-top-width: 0px;
   border-radius: 0 0 0.3em 0.3em;
@@ -47,6 +45,11 @@ export const ItemsContainer = styled.div`
       background-color: #252b41;
     }
   }
+`
+
+const NoItemsContainer = styled(ItemsContainer)`
+  text-align: center;
+  font-style: italic;
 `
 
 export default function ListAccordion({children, ...otherProps}) {
@@ -65,7 +68,7 @@ function Items({items, itemKey, itemTemplate}) {
   itemKey = itemKey || noop
   itemTemplate = itemTemplate || identity
   if (isBlank(items)) {
-    return (<ItemsContainer>No items</ItemsContainer>)
+    return (<NoItemsContainer>No items</NoItemsContainer>)
   }
   return (
     <ItemsContainer>

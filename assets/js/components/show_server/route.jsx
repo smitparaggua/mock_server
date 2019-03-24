@@ -5,7 +5,6 @@ import {Link} from "react-router-dom"
 import {showRoutePath} from "local_routes"
 
 const RouteContainer = styled.li`
-  margin: 0.5em;
 `
 
 const Description = styled.div`

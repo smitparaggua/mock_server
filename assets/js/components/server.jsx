@@ -6,6 +6,7 @@ import RunServerButton from "./run_server_button"
 import {confirmAlert} from "react-confirm-alert"
 import "react-confirm-alert/src/react-confirm-alert.css"
 import ListAccordion from "components/list_accordion"
+import RouteComponent from "components/show_server/route"
 
 const ServerContainer = styled.div`
   outline: none;
@@ -128,7 +129,11 @@ export default class Server extends React.PureComponent {
               </MenuItems>
             </ServerContainer>
           ),
-          items: []
+          items: server.routes,
+          itemKey: function (route) { return route.id },
+          itemTemplate: function (route) {
+            return <RouteComponent server={server} route={route} />
+          }
         }}
       </ListAccordion>
     )
