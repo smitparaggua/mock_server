@@ -12,7 +12,7 @@ const Description = styled.div`
   color: gray;
 `
 
-export default function ({route, server}) {
+export default function Route({route, server}) {
   const path = showRoutePath(server.id, route.id)
   return (
     <RouteContainer>
@@ -26,3 +26,23 @@ export default function ({route, server}) {
     </RouteContainer>
   )
 }
+
+function RoutesContainer({routes, server}) {
+  return (
+    <div>
+      {routes.map(route => <Route route={route} server={server} />)}
+    </div>
+  )
+}
+
+export const Routes = styled(RoutesContainer)`
+  background-color: #1b2238;
+
+  > div {
+    padding: 0.8em;
+
+    &:nth-child(even) {
+      background-color: #252b41;
+    }
+  }
+`

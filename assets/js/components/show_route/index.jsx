@@ -4,7 +4,7 @@ import {JsonBlock, CodeBlock} from "components/code"
 import {TextWithDefaultComment} from "components/text"
 import NotFound from "errors/not_found"
 import {Link} from "react-router-dom"
-import {serverPath} from "local_routes"
+import {serverPath, serversPath} from "local_routes"
 
 class ShowRoute extends React.PureComponent {
   constructor(props) {
@@ -71,6 +71,8 @@ class ShowRoute extends React.PureComponent {
     return (
       <div className="container">
         <h2>
+          <Link to={{pathname: serversPath()}}>Servers</Link>
+          {" > "}
           <Link to={{pathname: serverPath(this.serverId), state: {server}}}>
             {server.name}
           </Link>

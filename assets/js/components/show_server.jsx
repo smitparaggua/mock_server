@@ -2,7 +2,9 @@ import React from "react"
 import {Servers, Routes} from "js/api"
 import NotFound from "errors/not_found"
 import {ButtonLink} from "components/button"
-import Route from "components/show_server/route"
+import {Routes as RoutesComponent} from "components/show_server/route"
+import {serversPath} from "local_routes"
+import {Link} from "react-router-dom"
 
 const headerStyle = {
   display: "flex",
@@ -57,19 +59,22 @@ class ShowServer extends React.PureComponent {
       return (
         <div className="container">
           <div style={headerStyle}>
-            <h2 style={{display: "inline-block"}}>{server.name}</h2>
+            <h2 style={{display: "inline-block"}}>
+              <Link to={{pathname: serversPath()}}>Servers</Link>
+              {" > "}
+              {server.name} (<code>{server.path}</code>)
+            </h2>
             <ButtonLink to={`/servers/${server.id}/routes/new`} icon="plus">Create Route</ButtonLink>
           </div>
 
+          <div>
+            {server.description}
+          </div>
+
+          <h3>Routes</h3>
           {this.state.loadingRoutes
             ? this.renderLoading()
-            : (
-              <ul style={{listStyleType: "none"}}>
-                {this.state.routes.map(route => (
-                  <Route key={route.id} route={route} server={this.state.server}/>
-                ))}
-              </ul>
-            )
+            : <RoutesComponent routes={this.state.routes} server={this.state.server}/>
           }
         </div>
       )

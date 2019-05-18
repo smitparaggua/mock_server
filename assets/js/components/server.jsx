@@ -7,6 +7,7 @@ import {confirmAlert} from "react-confirm-alert"
 import "react-confirm-alert/src/react-confirm-alert.css"
 import ListAccordion from "components/list_accordion"
 import RouteComponent from "components/show_server/route"
+import DeleteButton from "components/server_listing/delete_button"
 
 const ServerContainer = styled.div`
   outline: none;
@@ -36,12 +37,6 @@ const MenuItems = styled.div`
     margin-right: 10px;
     margin-left: 10px;
   }
-`
-
-const DeleteButton = styled.i`
-  color: #a33;
-  font-size: 1.2em;
-  cursor: pointer;
 `
 
 export default class Server extends React.PureComponent {
@@ -78,7 +73,8 @@ export default class Server extends React.PureComponent {
       .then(() => this.setState({state: 'stopped'}))
   }
 
-  deleteServer(server) {
+  deleteServer(event, server) {
+    event.stopPropagation()
     const options = {
       title: 'Delete Server',
       message: `Are you sure you want to delete ${server.name}?`,
@@ -123,8 +119,7 @@ export default class Server extends React.PureComponent {
                 <RunServerButton state={this.state.state} onClick={() => this.toggleServer()}>
                   Start
                 </RunServerButton>
-                <DeleteButton className={`fa fa-times-circle`}
-                              onClick={() => this.deleteServer(server)}>
+                <DeleteButton onClick={(event) => this.deleteServer(event, server)}>
                 </DeleteButton>
               </MenuItems>
             </ServerContainer>

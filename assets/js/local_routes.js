@@ -1,3 +1,7 @@
+export function serversPath() {
+  return "/servers"
+}
+
 export function serverPath(id) {
   return `/servers/${id}`
 }
