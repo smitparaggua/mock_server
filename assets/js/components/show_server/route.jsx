@@ -5,6 +5,11 @@ import {Link} from "react-router-dom"
 import {showRoutePath} from "local_routes"
 
 const RouteContainer = styled.li`
+  background-color: #2e364f;
+  border-radius: 0.3em;
+  padding: 0.8em;
+  margin-bottom: 1em;
+  list-style-type: none;
 `
 
 const Description = styled.div`
@@ -30,7 +35,7 @@ export default function Route({route, server}) {
 function RoutesContainer({routes, server}) {
   return (
     <div>
-      {routes.map(route => <Route route={route} server={server} />)}
+      {routes.map(route => <Route key={route.id} route={route} server={server} />)}
     </div>
   )
 }

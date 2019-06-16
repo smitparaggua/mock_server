@@ -61,9 +61,7 @@ export default class Server extends React.PureComponent {
   startServer() {
     this.setState({state: 'starting'})
     Servers.start(this.state.server.id)
-      .then(console.log)
       .then(() => this.setState({state: 'running'}))
-      .then(() => console.log(this.state))
       .catch(() => this.setState({state: 'stopped'}))
   }
 
@@ -75,25 +73,43 @@ export default class Server extends React.PureComponent {
 
   deleteServer(event, server) {
     event.stopPropagation()
+    const ConfirmAlert = function ({title, message, onClose, onConfirm}) {
+      const Container = styled.div`
+        background-color: #151b31;
+        padding: 3em;
+        border-radius: 0.8em;
+
+        h1 {
+          margin-top: 0;
+        }
+      `
+
+      return (
+        <Container>
+          <h1>{title}</h1>
+          <p>{message}</p>
+          <button onClick={onClose}>No</button>
+          <button onClick={onYes}>Yes</button>
+        </Container>
+      )
+
+      function onYes() {
+        onConfirm()
+        onClose()
+      }
+    }
+
+    const onConfirm = () => {
+      return Servers.delete(server.id)
+        .then(this.onDeleteSuccess)
+        .catch(this.onDeleteFail)
+    }
+
     const options = {
       title: 'Delete Server',
       message: `Are you sure you want to delete ${server.name}?`,
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () => {
-            return Servers.delete(server.id)
-              .then(this.onDeleteSuccess)
-              .catch(this.onDeleteFail)
-            // TODO after delete handler
-            // on success, show deleted message toast, refresh list of servers
-            // on fail, show failed toast
-          }
-        },
-        {label: 'No'}
-      ],
       childrenElement: () => <div />,
-      // customUI: ({ title, message, onClose }) => <div>Custom UI</div>,
+      customUI: props => <ConfirmAlert onConfirm={onConfirm} {...props}/>,
       willUnmount: noop
     };
     confirmAlert(options);
@@ -101,7 +117,6 @@ export default class Server extends React.PureComponent {
 
   render() {
     const server = this.props.server
-    console.log(server)
     return (
       <ListAccordion>
         {{
