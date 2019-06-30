@@ -11,6 +11,7 @@ const StyledTextArea = styled.textarea`
   font-size: 1em;
   padding: 6px 12px;
   line-height: 1.42;
+  resize: ${props => props.resize ? props.resize : 'none'}
 `
 
 export const TextArea = ({rows = 3, ...otherProps}) => {

@@ -17,6 +17,20 @@ export const ResponseTypeDropdown = styled(Dropdown)`
   max-width: 20em;
 `
 
+const SpacedFormGroup = styled(FormGroup)`
+  display: flex;
+  justify-content: space-between;
+
+  > div {
+    margin-right: 1em;
+    flex-grow: 1;
+  }
+
+  > div:last-child {
+    margin-right: 0;
+  }
+`
+
 const httpMethods = [
   {value: "GET", text: "GET"},
   {value: "POST", text: "POST"},
@@ -34,6 +48,11 @@ const responseTypes = [
   {value: "text/html", text: "HTML (text/html)"}
 ]
 
+const responseDelays = [
+  {value: "RESPOND_IMMEDIATELY", text: "Respond Immediately"},
+  {value: "RESPOND_AFTER", text: "Respond After (in seconds)"}
+]
+
 export default class CreateRouteForm extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -43,16 +62,26 @@ export default class CreateRouteForm extends React.PureComponent {
       description: "",
       responseType: "application/json",
       created: false,
+      responseDelay: "RESPOND_IMMEDIATELY",
+      responseDelaySeconds: "",
       errors: {}
     }
 
     this.handleChange = this.handleChange.bind(this)
     this.handleChangeOf = this.handleChangeOf.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+    this.handleChangeOfResponseDelay = this.handleChangeOfResponseDelay.bind(this)
   }
 
   handleChangeOf(inputName) {
     return ({value}) => this.setState({[inputName]: value})
+  }
+
+  handleChangeOfResponseDelay({value}) {
+    if (value == "RESPOND_IMMEDIATELY") {
+      this.setState({responseDelaySeconds: ""})
+    }
+    this.setState({responseDelay: value})
   }
 
   handleChange(event) {
@@ -87,21 +116,30 @@ export default class CreateRouteForm extends React.PureComponent {
             </GroupedInput>
           </FormGroup>
 
-          <FormGroup errors={{"Response Type": errors.responseType, "Status Code": errors.statusCode}}>
+          <SpacedFormGroup errors={{"Response Type": errors.responseType, "Status Code": errors.statusCode}}>
             <GroupedInput>
               <ResponseTypeDropdown choices={responseTypes}
                 onChange={this.handleChangeOf("responseType")}/>
               <Input type="text" name="statusCode"
                 placeholder="Status Code" onChange={this.handleChange}/>
             </GroupedInput>
-          </FormGroup>
+            <GroupedInput>
+              <ResponseTypeDropdown choices={responseDelays}
+                onChange={this.handleChangeOfResponseDelay}/>
+              <Input type="text" name="responseDelaySeconds"
+                disabled={this.state.responseDelay != "RESPOND_AFTER"}
+                value={this.state.responseDelaySeconds || ''}
+                onChange={this.handleChange}/>
+            </GroupedInput>
+          </SpacedFormGroup>
 
           <FormGroup errors={{"Response Body": errors.responseBody}}>
-            <TextArea name="responseBody" placeholder="Response Body" onChange={this.handleChange}/>
+            <TextArea name="responseBody" placeholder="Response Body" resize="vertical"
+              onChange={this.handleChange}/>
           </FormGroup>
 
           <FormGroup errors={{Description: errors.description}}>
-            <TextArea name="description" placeholder="Description"
+            <TextArea name="description" placeholder="Description" resize="vertical"
               onChange={this.handleChange}/>
           </FormGroup>
 

@@ -5,8 +5,12 @@ defmodule MockServer.Servers.Route do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
 
-  @fields ~w(method path description status_code response_type response_body)a
   @required_fields ~w(method path status_code response_type response_body)a
+  @fields ~w(
+    method path description status_code response_type response_body
+    response_delay_seconds
+  )a
+
   @response_types ~w(
     application/json text/plain application/javascript application/xml
     text/xml text/html
@@ -19,6 +23,7 @@ defmodule MockServer.Servers.Route do
     field :status_code, :integer
     field :response_type, :string # TODO create valid choices
     field :response_body, :string
+    field :response_delay_seconds, :integer
     belongs_to :server, MockServer.Servers.Server
   end
 

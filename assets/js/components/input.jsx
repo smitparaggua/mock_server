@@ -18,6 +18,11 @@ const BaseInput = styled.input `
   line-height: 1.42;
   font-size: .8em;
   box-sizing: border-box;
+
+  &:disabled {
+    background-color: #9e9e9e;
+    border-color: #868686;
+  }
 `
 
 export const Input = (props) => {

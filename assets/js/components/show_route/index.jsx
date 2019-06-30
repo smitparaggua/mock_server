@@ -87,6 +87,12 @@ class ShowRoute extends React.PureComponent {
 
         <div>
           <code>{route.statusCode} ({route.responseType})</code>
+
+          {
+            route.responseDelaySeconds &&
+              ` responds after ${route.responseDelaySeconds} second seconds`
+          }
+
           {
             route.responseType == "application/json"
               ? <JsonBlock json={route.responseBody} />

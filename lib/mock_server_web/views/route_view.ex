@@ -5,7 +5,7 @@ defmodule MockServerWeb.RouteView do
 
   @route_attributes ~w(
     id method path description status_code response_type
-    server_id response_body
+    server_id response_body response_delay_seconds
   )a
 
   def render("route.json", d%{route}) do

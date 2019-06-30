@@ -6,10 +6,19 @@ defmodule MockServer.Servers.RunningServerTest do
     server = %Server{
       name: "Server 1",
       path: "/server",
-      routes: []
+      routes: [
+        %Route{
+          method: "GET",
+          path: "/hello",
+          status_code: 200,
+          response_type: "application/json",
+          response_body: ~S({"hello": "world"})
+        }
+      ]
     }
 
-    {:ok, %{server: server}}
+    {:ok, server_pid} = start_supervised({RunningServer, server}, id: :default_server)
+    {:ok, %{server: server, server_pid: server_pid}}
   end
 
   describe "access_path" do
@@ -41,8 +50,7 @@ defmodule MockServer.Servers.RunningServerTest do
       }
     end
 
-    test "when route does not exist", %{server: server} do
-      {:ok, server_pid} = start_supervised({RunningServer, server})
+    test "when route does not exist", %{server_pid: server_pid} do
       assert RunningServer.access_path(server_pid, "POST", "/hello-sir") == %{
         status_code: 404,
         response_type: "text/plain",
@@ -50,24 +58,16 @@ defmodule MockServer.Servers.RunningServerTest do
       }
     end
 
-    test "ignores query params on path resolution", %{server: server} do
-      routes = [
-        %Route{
-          method: "GET",
-          path: "/hello",
-          status_code: 200,
-          response_type: "application/json",
-          response_body: ~S({"hello": "world"})
-        },
-      ]
-
-      server = Map.put(server, :routes, routes)
-      {:ok, server_pid} = start_supervised({RunningServer, server})
+    test "ignores query params on path resolution", %{server_pid: server_pid} do
       assert RunningServer.access_path(server_pid, "GET", "/hello?query=param") == %{
         status_code: 200,
         response_type: "application/json",
         response_body: ~S({"hello": "world"})
       }
+    end
+
+    test "logs requests to the endpoint", %{server_pid: server_pid} do
+      # RunningServer.access_path
     end
   end
 end
