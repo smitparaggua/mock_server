@@ -12,6 +12,10 @@ class ShowRoute extends React.PureComponent {
     const linkProps = props.location.state || {}
     const server = props.server || linkProps.server
     const route = props.route || linkProps.route
+
+    this.loadRoute = this.loadRoute.bind(this)
+    this.loadServer = this.loadServer.bind(this)
+
     this.serverId = this.props.match.params.serverId
     this.id = this.props.match.params.id
     this.state = {
@@ -23,27 +27,33 @@ class ShowRoute extends React.PureComponent {
   }
 
   componentDidMount() {
-    const {server, route} = this.state
-    if (!server) {
-      Servers.get(this.serverId)
-        .then(server => this.setState({server, loadingServer: false}))
-        .catch(error => {
-          const response = error.response || {}
-          return response.status == 404
-            ? this.setState({loadingServer: false})
-            : this.setState({loadingServer: false, hasError: true})
-        })
-    }
+    return Promise.all([loadRoute(), loadServer()])
+  }
 
-    if (!route) {
-      Routes.get(this.id)
-        .then(route => this.setState({route, loadingRoute: false}))
-        .catch(error => {
-          const response = error.response || {}
-          return response.status == 404
-            ? this.setState({loadingRoute: false})
-            : this.setState({loadingRoute: false, hasError: true})
-        })
+  async loadRoute() {
+    if (!this.state.route) {
+      try {
+        const route = await Routes.get(this.id)
+        this.setState({route, loadingRoute: false})
+      } catch (error) {
+        return response.status == 404
+          ? this.setState({loadingRoute: false})
+          : this.setState({loadingRoute: false, hasError: true})
+      }
+    }
+  }
+
+  async loadServer() {
+    if (!this.state.server) {
+      try {
+        const server = await Servers.get(this.serverId)
+        this.setState({server, loadingServer: false})
+      } catch (error) {
+        const response = error.response || {}
+        return response.status == 404
+          ? this.setState({loadingServer: false})
+          : this.setState({loadingServer: false, hasError: true})
+      }
     }
   }
 

@@ -24,33 +24,42 @@ defmodule MockServer.Servers.RunningServer do
     end)
 
     if route do
-      result = %{
-        status_code: route.status_code,
-        response_type: route.response_type,
-        response_body: route.response_body
-      }
-
-      # TODO add test for delay and refactor this shit
-      case route.response_delay_seconds do
-        delay when delay in [nil, 0] ->
-          {:reply, result, state}
-
-        delay ->
-          Task.start(fn ->
-            :timer.sleep(1000 * delay)
-            GenServer.reply(from, result)
-          end)
-
-          {:noreply, state}
-      end
+      delayed_response(route, from, state)
     else
-      result = %{
-        status_code: 404,
-        response_type: "text/plain",
-        response_body: "Not found"
-      }
-
+      result = not_found_response()
       {:reply, result, state}
     end
+  end
+
+  defp delayed_response(route, from, state) do
+    result = route_response(route)
+    case route.response_delay_seconds do
+      delay when delay in [nil, 0] ->
+        {:reply, result, state}
+
+      delay ->
+        Task.start(fn ->
+          :timer.sleep(1000 * delay)
+          GenServer.reply(from, result)
+        end)
+
+        {:noreply, state}
+    end
+  end
+
+  defp route_response(route) do
+    %{
+      status_code: route.status_code,
+      response_type: route.response_type,
+      response_body: route.response_body
+    }
+  end
+
+  defp not_found_response() do
+    %{
+      status_code: 404,
+      response_type: "text/plain",
+      response_body: "Not found"
+    }
   end
 end

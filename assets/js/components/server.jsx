@@ -142,7 +142,7 @@ export default class Server extends React.PureComponent {
           items: server.routes,
           itemKey: function (route) { return route.id },
           itemTemplate: function (route) {
-            return <RouteComponent server={server} route={route} />
+            return <RouteComponent server={server} route={route} withoutBackground={true}/>
           }
         }}
       </ListAccordion>

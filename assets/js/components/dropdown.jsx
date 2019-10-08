@@ -1,11 +1,8 @@
 import React from "react"
 import Button from "components/button"
+import Icon from "components/icon"
 import styled, {css} from "styled-components"
 import {lifecycle, withStateHandlers, withState, compose, withHandlers} from "recompose"
-
-const Icon = ({icon}) => (
-  <i className={`fa fa-${icon}`}></i>
-)
 
 const Selection = styled.ul`
   font-size: 0.9em;

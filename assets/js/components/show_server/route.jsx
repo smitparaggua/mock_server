@@ -3,8 +3,15 @@ import styled from "styled-components"
 import {ButtonLink} from "components/button"
 import {Link} from "react-router-dom"
 import {showRoutePath} from "local_routes"
+import Icon from "components/icon"
 
-const RouteContainer = styled.li`
+
+const RouteContainerWithoutBackground = styled.li`
+  display: flex;
+  justify-content: space-between;
+`
+
+const RouteContainer = styled(RouteContainerWithoutBackground)`
   background-color: #2e364f;
   border-radius: 0.3em;
   padding: 0.8em;
@@ -17,18 +24,26 @@ const Description = styled.div`
   color: gray;
 `
 
-export default function Route({route, server}) {
+export default function Route({route, server, withoutBackground}) {
   const path = showRoutePath(server.id, route.id)
+  const Container = withoutBackground ? RouteContainerWithoutBackground : RouteContainer
   return (
-    <RouteContainer>
-      <Link to={{pathname: path, state: {route, server}}}>
-        {route.method} {route.path}
-      </Link>
+    <Container>
+      <div>
+        <Link to={{pathname: path, state: {route, server}}}>
+          {route.method} {route.path}
+        </Link>
 
-      <Description>
-        <div>{route.description}</div>
-      </Description>
-    </RouteContainer>
+        <Description>
+          <div>{route.description}</div>
+        </Description>
+      </div>
+
+      <div>
+        <Icon icon="edit"/>
+        <Icon icon="trash"/>
+      </div>
+    </Container>
   )
 }
 

@@ -66,6 +66,31 @@ defmodule MockServer.Servers.RunningServerTest do
       }
     end
 
+    test "supports delaying response", %{server: server} do
+      routes = [
+        %Route{
+          method: "GET",
+          path: "/delayed-hello",
+          status_code: 200,
+          response_type: "application/json",
+          response_body: ~S({"hello": "world"}),
+          response_delay_seconds: 1
+        }
+      ]
+
+      server = Map.put(server, :routes, routes)
+      {:ok, server_pid} = start_supervised({RunningServer, server})
+      start_time = DateTime.utc_now()
+      result = RunningServer.access_path(server_pid, "GET", "/delayed-hello")
+      end_time = DateTime.utc_now()
+      assert DateTime.diff(end_time, start_time, :millisecond) >= 1000
+      assert result == %{
+        status_code: 200,
+        response_type: "application/json",
+        response_body: ~S({"hello": "world"})
+      }
+    end
+
     test "logs requests to the endpoint", %{server_pid: server_pid} do
       # RunningServer.access_path
     end
